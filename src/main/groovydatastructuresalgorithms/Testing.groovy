@@ -4,10 +4,12 @@ class Testing {
 
     static void main(String[] args) {
 
-
         GHashTable<Integer, Integer> GHT = new GHashTable<>();
-        GHT.put(0, 1);
-        GHT.put(1, 13);
+        GHT.put(1, 21);
+        GHT.put(0, 13);
+        //GHT.put(7, 16);
+
+        println GHT.get(0)
         println GHT.get(1)
     }
 }

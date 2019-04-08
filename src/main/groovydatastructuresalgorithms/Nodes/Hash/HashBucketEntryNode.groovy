@@ -1,6 +1,5 @@
 package main.groovydatastructuresalgorithms.Nodes.Hash
 
-import main.groovydatastructuresalgorithms.NodeInterfaces.IHashBucketEntryNode
 import main.groovydatastructuresalgorithms.Nodes.ListNode
 import main.groovydatastructuresalgorithms.Nodes.MapNode
 import main.groovydatastructuresalgorithms.Nodes.TableNode
@@ -17,7 +16,7 @@ class HashBucketEntryNode {
     // Hash Collision Resolution
     // Hash Buckets Resize
 
-    static class HashingList<V> extends ListNode<V> implements IHashBucketEntryNode.HashingList<V> {
+    static class HashingList<V> extends ListNode<V>  {
 
         private final List<Integer> hashFunctions = new ArrayList<>();
         private final List<HashingList<V>> entries = new LinkedList<>();
@@ -40,8 +39,7 @@ class HashBucketEntryNode {
             bucketEntries = new int[defaultCapacity];
         }
 
-        @Override
-        HashingList<V> addHashEntry(V value) {
+        HashingList<V> addEntry(V value) {
             HashingList<V> node = new HashingList<>(value);
             int idx = Hash(key);
             entries.add(bucketEntries[idx], node);
@@ -49,19 +47,23 @@ class HashBucketEntryNode {
         }
 
         //TODO: Fix so index equals value
-        @Override
-        V getHashEntry(int index) {
+        V getEntry(int index) {
             HashingList<V> node;
             int idx = Hash();
             return node
         }
 
-        @Override
+        void deleteEntry(V value) {
+            int idx = Hash(value);
+            if(entries.get(bucketEntries[idx]).equals(getEntry(value))) {
+                entries.remove(bucketEntries[idx]);
+            }
+        }
+
         void addHash(int hash) {
             hashFunctions.add(hash);
         }
 
-        @Override
         int getHash(int index) {
             return hashFunctions.get(index);
         }
@@ -73,7 +75,7 @@ class HashBucketEntryNode {
         }
     }
 
-    static class HashingTree<V> extends TreeNode<V> implements IHashBucketEntryNode.HashingTree<V> {
+    static class HashingTree<V> extends TreeNode<V> {
 
         private final List<Integer> hashFunctions = new ArrayList<>();
         private final List<HashingTree<V>> entries = new LinkedList<>();
@@ -96,8 +98,7 @@ class HashBucketEntryNode {
             bucketEntries = new int[defaultCapacity];
         }
 
-        @Override
-        HashingTree<V> addHashEntry(V value) {
+        HashingTree<V> addEntry(V value) {
             HashingTree<V> node = new HashingTree<>(value);
             int idx = Hash(key);
             entries.add(bucketEntries[idx], node);
@@ -105,19 +106,23 @@ class HashBucketEntryNode {
         }
 
         //TODO: Fix so index equals value
-        @Override
-        V getHashEntry(int index) {
+        V getEntry(int index) {
             HashingTree<V> node;
             int idx = Hash();
             return node
         }
 
-        @Override
+        void deleteEntry(V value) {
+            int idx = Hash(value);
+            if(entries.get(bucketEntries[idx]).equals(getEntry(value))) {
+                entries.remove(bucketEntries[idx]);
+            }
+        }
+
         void addHash(int hash) {
             hashFunctions.add(hash);
         }
 
-        @Override
         int getHash(int index) {
             return hashFunctions.get(index);
         }
@@ -128,11 +133,10 @@ class HashBucketEntryNode {
             return hash;
         }
     }
-
-    static class HashingMap<K,V> extends MapNode<K,V> implements IHashBucketEntryNode.HashingMap<K,V> {
+    static class HashingMap<K,V> extends MapNode<K,V> {
 
         private final List<Integer> hashFunctions = new ArrayList<>();
-        private final List<HashingMap<K,V>> entries = new LinkedList<>();
+        final List<HashingMap<K,V>> entries = new LinkedList<>();
 
         HashingMap(K key, V value, int capacity, double loadFactor) {
             super(key, value);
@@ -152,19 +156,23 @@ class HashBucketEntryNode {
             bucketEntries = new int[defaultCapacity];
         }
 
-        @Override
-        HashingMap<K, V> putHashEntry(K key, V value) {
+
+        HashingMap<K, V> putEntry(K key, V value) {
             HashingMap<K, V> node = new HashingMap(key, value);
             int idx = Hash(key);
-            entries.add(bucketEntries[idx], node);
-            return node;
+            if(entries.get(bucketEntries[idx]).equals(null)) {
+                entries.add(bucketEntries[idx] + 1, node);
+                return node;
+            } else {
+                entries.add(bucketEntries[idx], node);
+                return node;
+            }
         }
 
-        @Override
-        V getHashEntry(K key) {
+        V getEntry(K key) {
             int idx = Hash(key);
             HashingMap<K, V> node = entries.get(bucketEntries[idx]);
-            while(node !=  null) {
+            while(node != null) {
                 if(node.getKey() == key) {
                     return node.getValue();
                 }
@@ -173,12 +181,17 @@ class HashBucketEntryNode {
             return null;
         }
 
-        @Override
+        void deleteEntry(K key) {
+            int idx = Hash(key);
+            if(entries.get(bucketEntries[idx]).equals(getEntry(key))) {
+                entries.remove(bucketEntries[idx]);
+            }
+        }
+
         void addHash(int hash) {
             hashFunctions.add(hash);
         }
 
-        @Override
         int getHash(int index) {
             return hashFunctions.get(index);
         }
@@ -190,7 +203,7 @@ class HashBucketEntryNode {
         }
     }
 
-    static class HashingTable<R,C,V> extends TableNode<R,C,V> implements IHashBucketEntryNode.HashingTable<R,C,V> {
+    static class HashingTable<R,C,V> extends TableNode<R,C,V> {
 
         private final List<Integer> hashFunctions = new ArrayList<>();
         private final List<HashingTable<R,C,V>> entries = new LinkedList<>();
@@ -213,16 +226,14 @@ class HashBucketEntryNode {
             bucketEntries = new int[defaultCapacity];
         }
 
-        @Override
-        HashingTable<R, C, V> putHashEntry(R row, C column, V value) {
+        HashingTable<R, C, V> putEntry(R row, C column, V value) {
             HashingTable<R,C,V> node = new HashingTable<>(row, column, value);
             int idx = Hash(row, column);
             entries.add(bucketEntries[idx], node);
             return node;
         }
 
-        @Override
-        V getHashEntry(R row, C column) {
+        V getEntry(R row, C column) {
             int idx = Hash(row, column);
             HashingTable<R,C,V> node = entries.get(bucketEntries[idx]);
             while(node !=  null) {
@@ -234,12 +245,17 @@ class HashBucketEntryNode {
             return null
         }
 
-        @Override
+        void deleteEntry(R row, C column) {
+            int idx = Hash(row, column);
+            if(entries.get(bucketEntries[idx]).equals(getEntry(row, column))) {
+                entries.remove(bucketEntries[idx]);
+            }
+        }
+
         void addHash(int hash) {
             hashFunctions.add(hash);
         }
 
-        @Override
         int getHash(int index) {
             return hashFunctions.get(index);
         }

@@ -20,6 +20,10 @@ class GHashTable<K, V> {
         return head;
     }
 
+    int size() {
+        return size;
+    }
+
     HashBucketEntryNode.HashingMap<K, V> put(K key, V value) {
         HashBucketEntryNode.HashingMap<K, V> node = new HashBucketEntryNode.HashingMap<K, V>(key, value);
         if(size == 0 || head == null) {
@@ -35,10 +39,20 @@ class GHashTable<K, V> {
             head = node;
         }
         size++;
-        return node.putHashEntry(key, value);
+        return node.putEntry(key, value);
     }
 
     V get(K key) {
-        return head.getHashEntry(key);
+        return head.getEntry(key);
+    }
+
+    void delete(K key) {
+        if(size == 0) {
+            return;
+        } else {
+            head = head.Next();
+            size--;
+        }
+        head.deleteEntry(key);
     }
 }
