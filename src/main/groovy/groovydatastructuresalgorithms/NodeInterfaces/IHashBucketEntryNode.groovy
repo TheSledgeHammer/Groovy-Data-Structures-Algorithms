@@ -1,6 +1,6 @@
-package main.groovydatastructuresalgorithms.NodeInterfaces
+package groovydatastructuresalgorithms.NodeInterfaces
 
-import main.groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryNode
+import groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryNode
 
 interface IHashBucketEntryNode {
 
@@ -26,7 +26,7 @@ interface IHashBucketEntryNode {
         int getHash(int index);
     }
 
-    interface HashingMap<K,V> {
+    interface HashingMap<K, V> {
 
         HashBucketEntryNode.HashingMap<K, V> putHashEntry(K key, V value);
 
@@ -37,9 +37,9 @@ interface IHashBucketEntryNode {
         int getHash(int index);
     }
 
-    interface HashingTable<R,C,V> {
+    interface HashingTable<R, C, V> {
 
-        HashBucketEntryNode.HashingTable<R,C,V> putHashEntry(R row, C column, V value);
+        HashBucketEntryNode.HashingTable<R, C, V> putHashEntry(R row, C column, V value);
 
         V getHashEntry(R row, C column);
 

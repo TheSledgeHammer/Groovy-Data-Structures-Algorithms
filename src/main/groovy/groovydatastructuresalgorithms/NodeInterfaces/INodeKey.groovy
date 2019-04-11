@@ -1,4 +1,4 @@
-package main.groovydatastructuresalgorithms.NodeInterfaces
+package groovydatastructuresalgorithms.NodeInterfaces
 
 interface INodeKey<K> {
 

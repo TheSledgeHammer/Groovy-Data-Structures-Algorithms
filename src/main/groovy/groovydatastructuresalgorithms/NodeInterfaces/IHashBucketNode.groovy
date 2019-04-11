@@ -1,8 +1,8 @@
-package main.groovydatastructuresalgorithms.NodeInterfaces
+package groovydatastructuresalgorithms.NodeInterfaces
 
 interface IHashBucketNode {
 
-    void Resize();
+    //void Resize();
 
     int getCapacity();
 
@@ -11,4 +11,6 @@ interface IHashBucketNode {
     void setCapacity(int capacity);
 
     void setLoadFactor(double loadFactor);
+
+    int HashBucketLoad();
 }
