@@ -1,6 +1,5 @@
 package groovydatastructuresalgorithms.Nodes.Hash
 
-import groovydatastructuresalgorithms.Nodes.Hash.HashBucketNode
 import groovydatastructuresalgorithms.Nodes.ListNode
 import groovydatastructuresalgorithms.Nodes.MapNode
 import groovydatastructuresalgorithms.Nodes.TableNode

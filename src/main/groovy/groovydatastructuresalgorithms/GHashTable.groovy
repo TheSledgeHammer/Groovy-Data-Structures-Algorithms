@@ -39,7 +39,6 @@ class GHashTable<K, V> {
         if (size >= Load()) {
             Resize(node)
         }
-        println node.Hash(key) == node.putEntry(key, value)
         return node.putEntry(key, value)
     }
 
