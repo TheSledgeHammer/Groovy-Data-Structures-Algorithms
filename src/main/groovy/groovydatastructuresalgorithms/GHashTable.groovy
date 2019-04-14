@@ -135,6 +135,6 @@ class GHashTable<K, V> {
     }
 
     private void Resize(HashBucketEntryNode.HashingMap<K, V> node) {
-        node.setCapacity(node.getCapacity() * 2)
+        node.setCapacity(node.getCapacity() * 2);
     }
 }
