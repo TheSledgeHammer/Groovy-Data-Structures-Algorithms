@@ -154,7 +154,7 @@ class CircularDoublyLinkedList<V> {
         return p
     }
 
-    void deleteFromHead() {
+    void removeFromHead() {
         if (size == 0) {
             return
         } else {
@@ -164,11 +164,11 @@ class CircularDoublyLinkedList<V> {
         }
     }
 
-    void deleteFromTail() {
+    void removeFromTail() {
         if (size == 0) {
             return
         } else if (size == 1) {
-            deleteFromHead()
+            removeFromHead()
         } else {
             V x = tail.getValue()
             ListNode<V> prevTail = tail.Prev()
@@ -179,7 +179,7 @@ class CircularDoublyLinkedList<V> {
         }
     }
 
-    void delete(V value) {
+    void remove(V value) {
         if (size == 0) {
             return
         } else {

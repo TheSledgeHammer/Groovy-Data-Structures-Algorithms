@@ -130,7 +130,7 @@ class DoublyLinkedList<V> {
         return -1;
     }
 
-    void deleteFromHead() {
+    void removeFromHead() {
         if (size == 0) {
             return
         } else {
@@ -140,11 +140,11 @@ class DoublyLinkedList<V> {
         }
     }
 
-    void deleteFromTail() {
+    void removeFromTail() {
         if (size == 0) {
             return
         } else if (size == 1) {
-            deleteFromHead()
+            removeFromHead()
         } else {
             V x = tail.getValue()
             ListNode<V> prevTail = tail.Prev()
@@ -155,7 +155,7 @@ class DoublyLinkedList<V> {
         }
     }
 
-    void delete(V value) {
+    void remove(V value) {
         if (size == 0) {
             return
         } else {

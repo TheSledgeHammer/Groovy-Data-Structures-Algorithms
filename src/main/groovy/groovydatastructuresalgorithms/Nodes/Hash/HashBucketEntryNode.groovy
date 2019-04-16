@@ -1,6 +1,5 @@
 package groovydatastructuresalgorithms.Nodes.Hash
 
-import groovydatastructuresalgorithms.CircularDoublyLinkedList
 import groovydatastructuresalgorithms.CircularDoublyLinkedMap
 import groovydatastructuresalgorithms.Nodes.ListNode
 import groovydatastructuresalgorithms.Nodes.MapNode
@@ -9,25 +8,13 @@ import groovydatastructuresalgorithms.Nodes.TreeNode
 
 import java.security.MessageDigest
 
-//The HashBucketEntryNode provides an extension to any node implementation in this library
-//Currently uses SHA1
+//WORK IN PROGRESS: HashingMap mostly Complete. Uses Cuckoo Hashing
 class HashBucketEntryNode {
 
     private static HashBucketNode buckets
     private static int[] bucketEntries
     private static final int defaultCapacity = 11
-    private static final double defaultLoadFactor = 0.7
-    private static HashBucketEntryNode instance;
-
-    static HashBucketEntryNode Instance() {
-        if(this.instance != null) {
-            this.instance = new HashBucketEntryNode();
-            return new HashBucketEntryNode();
-        }
-        return null;
-    }
-    //TODO:
-    // Hash Collision Resolution, Hash Algorithm
+    private static final double defaultLoadFactor = 0.8
 
     static class HashingList<V> extends ListNode<V> {
 
@@ -132,7 +119,7 @@ class HashBucketEntryNode {
 
         HashingTree<V> addEntry(V value) {
             HashingTree<V> node = new HashingTree<>(value)
-            int idx = SHA1(key)
+            int idx = SHA1(value)
             entries.add(bucketEntries[idx], node)
             return node
         }
@@ -188,73 +175,53 @@ class HashBucketEntryNode {
 
     static class HashingMap<K, V> extends MapNode<K, V> {
 
-        private final List<HashingMap<K, V>> entries = new LinkedList<>();
         private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table1 = new CircularDoublyLinkedMap<>();
         private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table2 = new CircularDoublyLinkedMap<>();
-        private final HashingContext.Key<K> hashedKey = new HashingContext.Key<K>();
 
         HashingMap(K key, V value, int capacity, double loadFactor) {
             super(key, value)
             buckets = new HashBucketNode(capacity, loadFactor)
             bucketEntries = new int[capacity]
-
-            hashedKey.setKey(key);
-            hashedKey.setHashBucketNode(buckets);
         }
 
         HashingMap(K key, V value) {
             super(key, value)
             buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
             bucketEntries = new int[defaultCapacity]
-
-            hashedKey.setKey(key);
-            hashedKey.setHashBucketNode(buckets);
         }
 
         HashingMap() {
             super()
             buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
             bucketEntries = new int[defaultCapacity]
-
-            hashedKey.setKey(key);
-            hashedKey.setHashBucketNode(buckets);
         }
 
         HashingMap<K, V> putEntry(K key, V value) {
-            HashingMap<K, V> node = new HashingMap(key, value)
-            /*for(int k = 0; k < entries.size(); k++) {
-                if(hashedKey.HashCollision(entries.get(bucketEntries[k]).getKey(), key)) {
-                    int idx0 = hashedKey.HashResolution(entries.get(bucketEntries[k]).getKey(), key);
-                    entries.add(bucketEntries[idx0], node);
+            HashingMap<K, V> node = new HashingMap(key, value);
+            if(table1 == null || table1.isEmpty() && table2 == null || table2.isEmpty()) {
+                table1.put(bucketEntries[MD5(key)], node);
+                table2.put(bucketEntries[SHA1(key)], node);
+            }
+            if(table1.containsKey(bucketEntries[MD5(key)]) && table1 != null) {
+                HashingMap<K, V> prev = table1.get(bucketEntries[MD5(key)]);
+                if(!table2.containsKey(bucketEntries[SHA1(key)])) {
+                    //: test if each HashFunction contains key to insert prev
+                    table2.put(bucketEntries[SHA1(key)], prev);
                 }
-            }*/
-            //entries.add(bucketEntries[MD5(key)], node);
+                table1.put(bucketEntries[MD5(key)], node);
+            }
+            if(table2.containsKey(bucketEntries[SHA1(key)]) && table2 != null) {
+                HashingMap<K, V> prev = table2.get(bucketEntries[SHA1(key)]);
+                if(!table1.containsKey(bucketEntries[MD5(key)])) {
+                    //: test if each HashFunction contains key to insert prev
+                    table1.put(bucketEntries[MD5(key)], prev);
+                }
+                table2.put(bucketEntries[SHA1(key)], node);
+            }
             table1.put(bucketEntries[MD5(key)], node);
             table2.put(bucketEntries[SHA1(key)], node);
             return node;
         }
-
-        /*
-        V getEntry(K key) {
-            if(entries.get(bucketEntries[MD5(key)]).getKey() == key) {
-                return entries.get(bucketEntries[MD5(key)]).getValue();
-            }
-            if(entries.get(bucketEntries[SHA1(key)]).getKey() == key) {
-                return entries.get(bucketEntries[SHA1(key)]).getValue();
-            }
-            return null;
-        }
-
-
-        void deleteEntry(K key) {
-            if (entries.get(bucketEntries[MD5(key)]).equals(getEntry(key))) {
-                entries.remove(bucketEntries[MD5(key)])
-                table1.delete(bucketEntries[MD5(key)])
-            }
-            if (entries.get(bucketEntries[SHA1(key)]).equals(getEntry(key))) {
-                entries.remove(bucketEntries[SHA1(key)])
-            }
-        }*/
 
         V getEntry(K key) {
             if(table1.get(bucketEntries[MD5(key)]).getKey() == key) {
@@ -266,71 +233,15 @@ class HashBucketEntryNode {
             return null;
         }
 
-        void deleteEntry(K key) {
+        void removeEntry(K key) {
             if (table1.get(bucketEntries[MD5(key)]).equals(getEntry(key))) {
-                table1.delete(bucketEntries[MD5(key)])
+                table1.remove(bucketEntries[MD5(key)])
             }
             if (table2.get(bucketEntries[SHA1(key)]).equals(getEntry(key))) {
-                table2.delete(bucketEntries[SHA1(key)])
+                table2.remove(bucketEntries[SHA1(key)])
             }
         }
 
-
-        /*
-        //Cannot Currently Resolve Entries with Hash Resolution implemented
-        V getEntry(K key) {
-            int idx0 = MD5(key);
-            int idx1 = SHA1(key);
-            HashingMap<K, V> node = entries.get(bucketEntries[idx0])
-            while (node != null) {
-                if (node.getKey() == key) {
-                    return node.getValue()
-                }
-                node = node.Next();
-            }
-            return null
-        }
-
-        private boolean HashCollisionDetected(K keyA, K keyB) {
-            int idx0 = SHA1(keyA);
-            int idx1 = SHA1(keyB);
-            if(idx0 == idx1) {
-                return true
-            }
-            return false;
-        }
-
-        //Linear Probing
-        private int HashResolution(K keyA, K keyB) {
-            int idx0 = SHA1(keyA);
-            int idx1 = SHA1(keyB);
-            if(idx0 == idx1) {
-                for(int i = idx0; i < getCapacity(); i++) {
-                    if(i != idx1) {
-                        return i;
-                    }
-                }
-            }
-            return idx0;
-        }
-
-        private void HashResolution(K keyB, HashingMap<K,V> node, int idx) {
-            for(int k = 0; k < entries.size(); k++) {
-                if(hashKey.HashCollision(entries.get(bucketEntries[k]).getKey(), keyB)) {
-                    int idx0 = hashKey.HashResolution(entries.get(bucketEntries[k]).getKey(), keyB);
-                    entries.add(bucketEntries[idx0], node);
-                }
-            }
-           // println "Not In Loop " + idx;
-            entries.add(bucketEntries[idx], node);
-        }
-
-
-        int Hash(K key) {
-            int hash = (key.hashCode() % buckets.getCapacity())
-            return hash
-        }
-*/
         private int SHA1(K key) {
             MessageDigest md = MessageDigest.getInstance("SHA1")
             byte[] messageDigest = md.digest(key.toString().getBytes())
@@ -339,7 +250,6 @@ class HashBucketEntryNode {
             return hash;
         }
 
-        //Default Hash Algorithm
         private int MD5(K key) {
             MessageDigest md = MessageDigest.getInstance("MD5")
             byte[] messageDigest = md.digest(key.toString().getBytes())

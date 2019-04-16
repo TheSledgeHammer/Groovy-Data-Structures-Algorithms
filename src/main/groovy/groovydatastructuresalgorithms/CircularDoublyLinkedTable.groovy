@@ -141,7 +141,7 @@ class CircularDoublyLinkedTable<R, C, V> {
         return -1;
     }
 
-    void deleteFromHead() {
+    void removeFromHead() {
         if (size == 0) {
             return
         } else {
@@ -151,11 +151,11 @@ class CircularDoublyLinkedTable<R, C, V> {
         }
     }
 
-    void deleteFromTail() {
+    void removeFromTail() {
         if (size == 0) {
             return
         } else if (size == 1) {
-            deleteFromHead()
+            removeFromHead()
         } else {
             V x = tail.getValue()
             TableNode<R, C, V> prevTail = tail.Prev()
@@ -166,7 +166,7 @@ class CircularDoublyLinkedTable<R, C, V> {
         }
     }
 
-    void delete(R row, C column) {
+    void remove(R row, C column) {
         if (size == 0) {
             return
         } else {

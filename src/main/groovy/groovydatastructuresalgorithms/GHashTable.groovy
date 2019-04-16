@@ -1,6 +1,7 @@
 package groovydatastructuresalgorithms
 
 import groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryNode
+import groovydatastructuresalgorithms.Nodes.MapNode
 
 //Follows a doublylinkedlist, but each node is hashed/ rehashed from a HashBucketEntryNode
 //Collisions are resolved using a variation on Cuckoo Hashing
@@ -44,23 +45,42 @@ class GHashTable<K, V> {
     }
 
     V get(K key) {
-       /* while (headHasNext()) {
-            head.setKey(searchNextKey(key));
-            if (head.getKey() == key) {
-                return head.getEntry(key);
-            }
-        }*/
         return head.getEntry(key);
     }
 
-    void delete(K key) {
+    void remove(K key) {
         if (size == 0) {
             return
         } else {
             head = head.Next()
             size--
         }
-        head.deleteEntry(key)
+        head.removeEntry(key)
+    }
+
+    int indexOfKey(K key) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getKey().equals(key)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private HashBucketEntryNode.HashingMap<K, V> getNode(int i) {
+        HashBucketEntryNode.HashingMap<K, V> p = null
+        if (i < size / 2) {
+            p = head.Next()
+            for (int j = 0; j < i; j++) {
+                p = p.Next()
+            }
+        } else {
+            p = head
+            for (int j = size - 1; j > i; j--) {
+                p = p.Prev()
+            }
+        }
+        return p
     }
 
     private K searchNextKey(K key) {
@@ -137,9 +157,5 @@ class GHashTable<K, V> {
 
     private void Resize(HashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() * 2);
-    }
-
-    void Test() {
-        println head.table1.size()
     }
 }

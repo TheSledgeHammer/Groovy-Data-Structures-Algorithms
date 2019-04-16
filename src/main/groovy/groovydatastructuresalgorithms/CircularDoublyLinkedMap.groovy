@@ -135,7 +135,7 @@ class CircularDoublyLinkedMap<K, V> {
         return -1
     }
 
-    MapNode<K, V> getNode(int i) {
+    protected MapNode<K, V> getNode(int i) {
         MapNode<K, V> p = null
         if (i < size / 2) {
             p = head.Next()
@@ -187,7 +187,7 @@ class CircularDoublyLinkedMap<K, V> {
         }
     }
 
-    void delete(K key) {
+    void remove(K key) {
         if (size == 0) {
             return
         } else {
@@ -199,13 +199,25 @@ class CircularDoublyLinkedMap<K, V> {
         }
     }
 
-    boolean contains(K key) {
+    boolean containsKey(K key) {
         if (key == null) {
             throw new IllegalArgumentException("argument to contains() is null")
         }
         return get(key) != null
     }
 
+    boolean containsValue(V value) {
+        if(value == null) {
+            throw new IllegalArgumentException("argument to contains() is null")
+        }
+        for(int i = 0; i < size; i++) {
+            if(getNode(i).getValue() == value) {
+                return getNode(i).getValue() != null
+            }
+        }
+        return false;
+    }
+/*
     boolean headHasNext() {
         if (head.Next() != null) {
             return true
@@ -288,6 +300,7 @@ class CircularDoublyLinkedMap<K, V> {
         other.setValue(value)
         return value
     }
+    */
 
     private int countHead(V value) {
         int count = 0
@@ -319,6 +332,7 @@ class CircularDoublyLinkedMap<K, V> {
         }
         return false
     }
+
 }
 
 /*
