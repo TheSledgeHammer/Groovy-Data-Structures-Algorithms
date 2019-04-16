@@ -108,6 +108,104 @@ class CircularDoublyLinkedMap<K, V> {
         return node
     }
 
+    int indexOfKey(K key) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getKey().equals(key)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    int indexOfValue(V value) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getValue().equals(value)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    int indexOf(K key, V value) {
+        int index// = 0;
+        if (indexOfKey(key) == indexOfValue(value)) {
+            index = (indexOfKey(key) + indexOfValue(value)) / 2
+            return index
+        }
+        return -1
+    }
+
+    MapNode<K, V> getNode(int i) {
+        MapNode<K, V> p = null
+        if (i < size / 2) {
+            p = head.Next()
+            for (int j = 0; j < i; j++) {
+                p = p.Next()
+            }
+        } else {
+            p = head
+            for (int j = size - 1; j > i; j--) {
+                p = p.Prev()
+            }
+        }
+        return p
+    }
+
+    V get(K key) {
+        int idx = indexOfKey(key);
+        if(isEmpty()) {
+            return null;
+        }
+        if (getNode(idx).getKey() == key) {
+            return getNode(idx).getValue()
+        }
+        return null
+    }
+
+    void deleteFromHead() {
+        if (size == 0) {
+            return
+        } else {
+            System.out.println("\n deleting node " + head.getValue() + " from start")
+            head = head.Next()
+            size--
+        }
+    }
+
+    void deleteFromTail() {
+        if (size == 0) {
+            return
+        } else if (size == 1) {
+            deleteFromHead()
+        } else {
+            V x = tail.getValue()
+            MapNode<K, V> prevTail = tail.Prev()
+            tail = prevTail
+            tail.setNext(null)
+            System.out.println("\n deleting node " + x + " from end")
+            size--
+        }
+    }
+
+    void delete(K key) {
+        if (size == 0) {
+            return
+        } else {
+            head = getNode(indexOfKey(key));
+            head.setKey(null);
+            head.setValue(null);
+            head = head.Next();
+            size--;
+        }
+    }
+
+    boolean contains(K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("argument to contains() is null")
+        }
+        return get(key) != null
+    }
+
     boolean headHasNext() {
         if (head.Next() != null) {
             return true
@@ -221,7 +319,9 @@ class CircularDoublyLinkedMap<K, V> {
         }
         return false
     }
+}
 
+/*
     int indexOfKey(K key) {
         int index = 0
         while (headHasNext()) {
@@ -250,67 +350,7 @@ class CircularDoublyLinkedMap<K, V> {
         return index - 1
     }
 
-    int indexOf(K key, V value) {
-        int index// = 0;
-        if (indexOfKey(key) == indexOfValue(value)) {
-            index = (indexOfKey(key) + indexOfValue(value)) / 2
-            return index
-        }
-        return -1
-    }
-
-    MapNode<K, V> getNode(int i) {
-        MapNode<K, V> p = null
-        if (i < size / 2) {
-            p = head.Next()
-            for (int j = 0; j < i; j++) {
-                p = p.Next()
-            }
-        } else {
-            p = head
-            for (int j = size - 1; j > i; j--) {
-                p = p.Prev()
-            }
-        }
-        return p
-    }
-
-    V get(K key) {
-        while (headHasNext()) {
-            head.setKey(searchNextKey(key))
-            if (head.getKey() == key) {
-                return head.getValue()
-            }
-        }
-        return null
-    }
-
-    void deleteFromHead() {
-        if (size == 0) {
-            return
-        } else {
-            System.out.println("\ndeleting node " + head.getValue() + " from start")
-            head = head.Next()
-            size--
-        }
-    }
-
-    void deleteFromTail() {
-        if (size == 0) {
-            return
-        } else if (size == 1) {
-            deleteFromHead()
-        } else {
-            V x = tail.getValue()
-            MapNode<K, V> prevTail = tail.Prev()
-            tail = prevTail
-            tail.setNext(null)
-            System.out.println("\ndeleting node " + x + " from end")
-            size--
-        }
-    }
-
-    void deleteAtPos(int index) {
+        void deleteAtPos(int index) {
         if (index == 1) {
             if (size == 1) {
                 head = null
@@ -346,11 +386,4 @@ class CircularDoublyLinkedMap<K, V> {
             other = other.Next()
         }
     }
-
-    boolean contains(K key) {
-        if (key == null) {
-            throw new IllegalArgumentException("argument to contains() is null")
-        }
-        return get(key) != null
-    }
-}
+    */

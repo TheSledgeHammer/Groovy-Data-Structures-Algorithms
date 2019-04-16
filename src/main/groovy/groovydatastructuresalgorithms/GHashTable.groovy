@@ -3,6 +3,7 @@ package groovydatastructuresalgorithms
 import groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryNode
 
 //Follows a doublylinkedlist, but each node is hashed/ rehashed from a HashBucketEntryNode
+//Collisions are resolved using a variation on Cuckoo Hashing
 class GHashTable<K, V> {
 
     private HashBucketEntryNode.HashingMap<K, V> head
@@ -43,13 +44,13 @@ class GHashTable<K, V> {
     }
 
     V get(K key) {
-        while (headHasNext()) {
-            head.setKey(searchNextKey(key))
+       /* while (headHasNext()) {
+            head.setKey(searchNextKey(key));
             if (head.getKey() == key) {
-                return head.getEntry(key)
+                return head.getEntry(key);
             }
-        }
-        return null
+        }*/
+        return head.getEntry(key);
     }
 
     void delete(K key) {
@@ -136,5 +137,9 @@ class GHashTable<K, V> {
 
     private void Resize(HashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() * 2);
+    }
+
+    void Test() {
+        println head.table1.size()
     }
 }

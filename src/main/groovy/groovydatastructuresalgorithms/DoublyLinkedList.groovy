@@ -83,8 +83,19 @@ class DoublyLinkedList<V> {
         return node
     }
 
-    V get(int index) {
+    V getByIndex(int index) {
         return getNode(index).getValue()
+    }
+
+    V get(V value) {
+        int idx = indexOfValue(value);
+        if(isEmpty()) {
+            return null;
+        }
+        if (getNode(idx).getValue() == value) {
+            return getNode(idx).getValue()
+        }
+        return null
     }
 
     V set(int index, V value) {
@@ -110,18 +121,57 @@ class DoublyLinkedList<V> {
         return p
     }
 
-    int indexOf(V value) {
-        int index = 0
-        while (headHasNext()) {
-            index++
-            if (getNode(index).getValue().equals(value)) {
-                break
+    int indexOfValue(V value) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getValue().equals(value)) {
+                return i;
             }
         }
-        if (index < 0) {
-            return 0
+        return -1;
+    }
+
+    void deleteFromHead() {
+        if (size == 0) {
+            return
+        } else {
+            System.out.println("\ndeleting node " + head.getValue() + " from start")
+            head = head.Next()
+            size--
         }
-        return index - 1
+    }
+
+    void deleteFromTail() {
+        if (size == 0) {
+            return
+        } else if (size == 1) {
+            deleteFromHead()
+        } else {
+            V x = tail.getValue()
+            ListNode<V> prevTail = tail.Prev()
+            tail = prevTail
+            tail.setNext(null)
+            System.out.println("\ndeleting node " + x + " from end")
+            size--
+        }
+    }
+
+    void delete(V value) {
+        if (size == 0) {
+            return
+        } else {
+            head = getNode(indexOfValue(value));
+            head.setValue(null);
+            head = head.Next();
+            size--;
+        }
+    }
+
+    Iterator<V> iterator() {
+        Set<V> dll = new HashSet<>()
+        for (int i = 0; i < size; i++) {
+            dll.add(head.getValue())
+        }
+        return dll.iterator()
     }
 
     boolean headHasNext() {
@@ -209,75 +259,5 @@ class DoublyLinkedList<V> {
             }
         }
         return count
-    }
-
-    Iterator<V> iterator() {
-        Set<V> dll = new HashSet<>()
-        for (int i = 0; i < size; i++) {
-            dll.add(head.getValue())
-        }
-        return dll.iterator()
-    }
-
-    void deleteFromHead() {
-        if (size == 0) {
-            return
-        } else {
-            System.out.println("\ndeleting node " + head.getValue() + " from start")
-            head = head.Next()
-            size--
-        }
-    }
-
-    void deleteFromTail() {
-        if (size == 0) {
-            return
-        } else if (size == 1) {
-            deleteFromHead()
-        } else {
-            V x = tail.getValue()
-            ListNode<V> prevTail = tail.Prev()
-            tail = prevTail
-            tail.setNext(null)
-            System.out.println("\ndeleting node " + x + " from end")
-            size--
-        }
-    }
-
-    void deleteAtPos(int index) {
-        if (index == 1) {
-            if (size == 1) {
-                head = null
-                tail = null
-                size = 0
-                return
-            }
-
-            head = head.Next()
-            head.setPrev(tail)
-            tail.setNext(head)
-            size--
-            return
-        }
-
-        if (index == size) {
-            tail = tail.Prev()
-            tail.setNext(head)
-            head.setPrev(tail)
-            size--
-        }
-
-        ListNode<V> other = head.Next()
-        for (int i = 2; i <= size; i++) {
-            if (i == index) {
-                ListNode<V> p = other.Prev()
-                ListNode<V> n = other.Next()
-                p.setNext(n)
-                n.setPrev(p)
-                size--
-                return
-            }
-            other = other.Next()
-        }
     }
 }

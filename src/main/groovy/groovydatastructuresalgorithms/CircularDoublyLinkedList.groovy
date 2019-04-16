@@ -107,8 +107,19 @@ class CircularDoublyLinkedList<V> {
         return node
     }
 
-    V get(int index) {
+    V getByIndex(int index) {
         return getNode(index).getValue()
+    }
+
+    V get(V value) {
+        int idx = indexOfValue(value);
+        if(isEmpty()) {
+            return null;
+        }
+        if (getNode(idx).getValue() == value) {
+            return getNode(idx).getValue()
+        }
+        return null
     }
 
     V set(int index, V value) {
@@ -118,18 +129,13 @@ class CircularDoublyLinkedList<V> {
         return val
     }
 
-    int indexOf(V value) {
-        int index = 0
-        while (headHasNext()) {
-            index++
-            if (getNode(index).getValue().equals(value)) {
-                break
+    int indexOfValue(V value) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getValue().equals(value)) {
+                return i;
             }
         }
-        if (index < 0) {
-            return 0
-        }
-        return index - 1
+        return -1;
     }
 
     protected ListNode<V> getNode(int i) {
@@ -173,41 +179,23 @@ class CircularDoublyLinkedList<V> {
         }
     }
 
-    void deleteAtPos(int index) {
-        if (index == 1) {
-            if (size == 1) {
-                head = null
-                tail = null
-                size = 0
-                return
-            }
-
-            head = head.Next()
-            head.setPrev(tail)
-            tail.setNext(head)
-            size--
+    void delete(V value) {
+        if (size == 0) {
             return
+        } else {
+            head = getNode(indexOfValue(value));
+            head.setValue(null);
+            head = head.Next();
+            size--;
         }
+    }
 
-        if (index == size) {
-            tail = tail.Prev()
-            tail.setNext(head)
-            head.setPrev(tail)
-            size--
+    Iterator<V> iterator() {
+        Set<V> cdll = new HashSet<>()
+        for (int i = 0; i < size; i++) {
+            cdll.add(head.getValue())
         }
-
-        ListNode<V> other = head.Next()
-        for (int i = 2; i <= size; i++) {
-            if (i == index) {
-                ListNode<V> p = other.Prev()
-                ListNode<V> n = other.Next()
-                p.setNext(n)
-                n.setPrev(p)
-                size--
-                return
-            }
-            other = other.Next()
-        }
+        return cdll.iterator()
     }
 
     private boolean isEven(int value) {
@@ -302,13 +290,5 @@ class CircularDoublyLinkedList<V> {
             }
         }
         return count
-    }
-
-    Iterator<V> iterator() {
-        Set<V> cdll = new HashSet<>()
-        for (int i = 0; i < size; i++) {
-            cdll.add(head.getValue())
-        }
-        return cdll.iterator()
     }
 }

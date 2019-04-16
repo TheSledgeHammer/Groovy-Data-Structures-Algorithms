@@ -88,14 +88,57 @@ class CircularDoublyLinkedTable<R, C, V> {
     }
 
     V get(R row, C column) {
-        while (headHasNext()) {
-            head.setRow(searchNextRow(row))
-            head.setColumn(searchNextColumn(column))
-            if (head.getRow() == row && head.getColumn() == column) {
-                return head.getValue()
-            }
+        int idx = indexOf(row, column);
+        if(isEmpty()) {
+            return null;
+        }
+        if (getNode(idx).getRow() == row && getNode(idx).getColumn() == column) {
+            return getNode(idx).getValue()
         }
         return null
+    }
+
+    int indexOfRow(R row) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getRow().equals(row)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    int indexOfColumn(C column) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getColumn().equals(column)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    int indexOfValue(V value) {
+        for(int i = 0; i <= size; i++) {
+            if (getNode(i).getValue().equals(value)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    int indexOf(R row, C column) {
+        if(indexOfRow(row) == indexOfColumn(column)) {
+            int index = (indexOfRow(row) + indexOfColumn(column)) / 2;
+            return index;
+        }
+        return -1;
+    }
+
+    int indexOf(R row, C column, V value) {
+        if(indexOfRow(row) == indexOfColumn(column) && indexOfRow(row) == indexOfValue(value) &&  indexOfColumn(column) == indexOfValue(value)) {
+            int index = (indexOfRow(row) + indexOfColumn(column) + indexOfValue(value)) / 3;
+            return index;
+        }
+        return -1;
     }
 
     void deleteFromHead() {
@@ -122,96 +165,19 @@ class CircularDoublyLinkedTable<R, C, V> {
             size--
         }
     }
-//Buggy: Doesn't seem to delete;
-    void deleteAtPos(int index) {
-        if (index == 1) {
-            if (size == 1) {
-                head = null
-                tail = null
-                size = 0
-                return
-            }
 
-            head = head.Next()
-            head.setPrev(tail)
-            tail.setNext(head)
-            size--
+    void delete(R row, C column) {
+        if (size == 0) {
             return
-        }
-
-        if (index == size) {
-            tail = tail.Prev()
-            tail.setNext(head)
-            head.setPrev(tail)
-            size--
-        }
-
-        TableNode<R, C, V> other = head.Next()
-        for (int i = 2; i <= size; i++) {
-            if (i == index) {
-                TableNode<R, C, V> p = other.Prev()
-                TableNode<R, C, V> n = other.Next()
-                p.setNext(n)
-                n.setPrev(p)
-                size--
-                return
-            }
-            other = other.Next()
+        } else {
+            head = getNode(indexOf(row, column));
+            head.setRow(null);
+            head.setColumn(null);
+            head.setValue(null);
+            head = head.Next();
+            size--;
         }
     }
-    /*
-    int indexOfKey(R row) {
-        int index = 0;
-        while(headHasNext()) {
-            index++;
-            if(getNode(index).getRow().equals(row)) {
-                break;
-            }
-        }
-        if(index < 0) {
-            return 0;
-        }
-        return index - 1;
-    }
-
-
-    int indexOfColumn(C column) {
-        int index = 0;
-        while(headHasNext()) {
-            index++;
-            if(getNode(index).getColumn().equals(column)) {
-                break;
-            }
-        }
-        if(index < 0) {
-            return 0;
-        }
-        return index - 1;
-    }
-
-    int indexOfValue(V value) {
-        int index = 0;
-        while(headHasNext()) {
-            index++;
-            if(getNode(index).getValue().equals(value) ) {
-                break;
-            }
-        }
-        if(index < 0) {
-            return 0;
-        }
-        return index - 1;
-    }
-
-    int indexOf(R row, C column, V value) {
-        //int index = 0;
-        if(indexOfKey(row) == indexOfColumn(column) && indexOfKey(row) == indexOfValue(value) &&  indexOfColumn(column) == indexOfValue(value)) {
-            int index = (indexOfKey(key) + indexOfColumn(column) + indexOfValue(value)) / 3;
-            return index;
-        }
-        return -1;
-    }
-    */
 
     boolean headHasNext() {
         if (head.Next() != null) {
