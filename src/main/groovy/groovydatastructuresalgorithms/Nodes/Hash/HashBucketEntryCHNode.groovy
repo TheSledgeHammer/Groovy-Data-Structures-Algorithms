@@ -16,6 +16,10 @@
 
 package groovydatastructuresalgorithms.Nodes.Hash
 
+import com.google.common.hash.HashCode
+import com.google.common.hash.HashFunction
+import com.google.common.hash.Hashing
+import fnv.FNV
 import groovydatastructuresalgorithms.CircularDoublyLinkedMap
 import groovydatastructuresalgorithms.Nodes.ListNode
 import groovydatastructuresalgorithms.Nodes.MapNode
@@ -26,12 +30,12 @@ import java.security.MessageDigest
 
 //HashBucketEntryNodeCH: Refers to Hashing using Cuckoo Collision
 //WORK IN PROGRESS: HashingMap mostly Complete. Uses Cuckoo Hashing
-class HashBucketEntryNodeCH {
+class HashBucketEntryCHNode {
 
     private static HashBucketNode buckets
     private static int[] bucketEntries
     private static final int defaultCapacity = 11
-    private static final double defaultLoadFactor = 0.8
+    private static final double defaultLoadFactor = 0.9
 
     static class HashingList<V> extends ListNode<V> {
 
@@ -194,6 +198,8 @@ class HashBucketEntryNodeCH {
 
         private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table1 = new CircularDoublyLinkedMap<>();
         private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table2 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table3 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table4 = new CircularDoublyLinkedMap<>();
 
         HashingMap(K key, V value, int capacity, double loadFactor) {
             super(key, value)
@@ -215,28 +221,65 @@ class HashBucketEntryNodeCH {
 
         HashingMap<K, V> putEntry(K key, V value) {
             HashingMap<K, V> node = new HashingMap(key, value);
-            if(table1 == null || table1.isEmpty() && table2 == null || table2.isEmpty()) {
+            if(table1 == null || table1.isEmpty() && table2 == null || table2.isEmpty() && table3 == null || table3.isEmpty() && table4 == null || table4.isEmpty()) {
                 table1.put(bucketEntries[MD5(key)], node);
                 table2.put(bucketEntries[SHA1(key)], node);
+                table3.put(bucketEntries[FNV1A(key)], node);
+                table4.put(bucketEntries[MURMUR3(key)], node);
             }
+            //MD5
             if(table1.containsKey(bucketEntries[MD5(key)]) && table1 != null) {
                 HashingMap<K, V> prev = table1.get(bucketEntries[MD5(key)]);
                 if(!table2.containsKey(bucketEntries[SHA1(key)])) {
-                    //: test if each HashFunction contains key to insert prev
                     table2.put(bucketEntries[SHA1(key)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(key)])) {
+                    table3.put(bucketEntries[FNV1A(key)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(key)])) {
+                    table4.put(bucketEntries[MURMUR3(key)], prev);
                 }
                 table1.put(bucketEntries[MD5(key)], node);
             }
+            //SHA1
             if(table2.containsKey(bucketEntries[SHA1(key)]) && table2 != null) {
                 HashingMap<K, V> prev = table2.get(bucketEntries[SHA1(key)]);
                 if(!table1.containsKey(bucketEntries[MD5(key)])) {
-                    //: test if each HashFunction contains key to insert prev
                     table1.put(bucketEntries[MD5(key)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(key)])) {
+                    table3.put(bucketEntries[FNV1A(key)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(key)])) {
+                    table4.put(bucketEntries[MURMUR3(key)], prev);
                 }
                 table2.put(bucketEntries[SHA1(key)], node);
             }
+            //FNV1A
+            if(table3.containsKey(bucketEntries[FNV1A(key)]) && table3 != null) {
+                HashingMap<K, V> prev = table3.get(bucketEntries[FNV1A(key)]);
+                if(!table1.containsKey(bucketEntries[MD5(key)])) {
+                    table1.put(bucketEntries[MD5(key)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(key)])) {
+                    table2.put(bucketEntries[SHA1(key)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(key)])) {
+                    table4.put(bucketEntries[MURMUR3(key)], prev);
+                }
+                table3.put(bucketEntries[FNV1A(key)], node);
+            }
+            //MURMUR3
+            if(table4.containsKey(bucketEntries[MURMUR3(key)]) && table4 != null) {
+                HashingMap<K, V> prev = table4.get(bucketEntries[MURMUR3(key)]);
+                if(!table1.containsKey(bucketEntries[MD5(key)])) {
+                    table1.put(bucketEntries[MD5(key)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(key)])) {
+                    table2.put(bucketEntries[SHA1(key)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(key)])) {
+                    table3.put(bucketEntries[FNV1A(key)], prev);
+                }
+                table4.put(bucketEntries[MURMUR3(key)], node);
+            }
+
             table1.put(bucketEntries[MD5(key)], node);
             table2.put(bucketEntries[SHA1(key)], node);
+            table3.put(bucketEntries[FNV1A(key)], node);
+            table4.put(bucketEntries[MURMUR3(key)], node);
             return node;
         }
 
@@ -247,15 +290,27 @@ class HashBucketEntryNodeCH {
             if(table2.get(bucketEntries[SHA1(key)]).getKey() == key) {
                 return table2.get(bucketEntries[SHA1(key)]).getValue();
             }
+            if(table3.get(bucketEntries[FNV1A(key)]).getKey() == key) {
+                return table3.get(bucketEntries[FNV1A(key)]).getValue();
+            }
+            if(table4.get(bucketEntries[MURMUR3(key)]).getKey() == key) {
+                return table4.get(bucketEntries[MURMUR3(key)]).getValue();
+            }
             return null;
         }
 
         void removeEntry(K key) {
-            if (table1.get(bucketEntries[MD5(key)]).equals(getEntry(key))) {
+            if (table1.containsKey(bucketEntries[MD5(key)])) {
                 table1.remove(bucketEntries[MD5(key)])
             }
-            if (table2.get(bucketEntries[SHA1(key)]).equals(getEntry(key))) {
+            if (table2.containsKey(bucketEntries[SHA1(key)])) {
                 table2.remove(bucketEntries[SHA1(key)])
+            }
+            if(table3.containsKey(bucketEntries[FNV1A(key)])) {
+                table3.remove(bucketEntries[FNV1A(key)]);
+            }
+            if(table4.containsKey(bucketEntries[MURMUR3(key)])) {
+                table4.remove(bucketEntries[MURMUR3(key)]);
             }
         }
 
@@ -272,6 +327,23 @@ class HashBucketEntryNodeCH {
             byte[] messageDigest = md.digest(key.toString().getBytes())
             BigInteger no = new BigInteger(1, messageDigest)
             int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int FNV1A(K key) {
+            byte[] digest = FNV.fnv1a(key.toString().getBytes(), 128);
+            BigInteger no = new BigInteger(1, digest);
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int MURMUR3(K key) {
+            HashFunction hf = Hashing.murmur3_128()
+            HashCode hc = hf.newHasher()
+                    .putBytes(key.toString().getBytes())
+                    .hash()
+            BigInteger no = new BigInteger(1, hc.asBytes())
+            int hash = no % buckets.getCapacity();
             return hash;
         }
 
@@ -344,7 +416,6 @@ class HashBucketEntryNodeCH {
             }
         }
 
-        //Default Hash Algorithm
         private int Hash(R row, C column) {
             int hash = (row.hashCode() + column.hashCode() % buckets.getCapacity())
             return hash

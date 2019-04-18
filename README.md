@@ -12,12 +12,13 @@ Currently doesn't contain all the data structure.
 #### Maps:
 * CircularDoublyLinkedMap: A Map implementation of a CircularDoublyLinkedList. Near exactly same as CircularDoublyLinkedList but with a key-value pair.
 
-#### Tables: Structure is based of Google Gauva's Tables
+#### Tables: Structure is based of Google Guava's Tables
 * CircularDoublyLinkedTable: A Table implementation of a CircularDoublyLinkedList. Similar to CircularDoublyLinkedList but with a row-column-value triplet.
 
 #### Hashing (Work In Progress):
 * Contains a New API for creating data structures using hash algorithms.
 * Currently contains methods for Seperate Chaining & Open Addressing using Cuckoo
+* CuckooHashTable: A HashTable using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
 
 ## Apache Licence 2.0
 Copyright [2018] [Martin Kelly]

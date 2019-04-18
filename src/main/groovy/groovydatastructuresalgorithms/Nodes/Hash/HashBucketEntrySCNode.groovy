@@ -22,7 +22,7 @@ import groovydatastructuresalgorithms.Nodes.MapNode
 
 import java.security.MessageDigest
 // HashBucketEntryNodeSC: Refers to Hashing using Seperate Chaining
-class HashBucketEntryNodeSC {
+class HashBucketEntrySCNode {
 
     private static HashBucketNode buckets
     private static int[] bucketEntries

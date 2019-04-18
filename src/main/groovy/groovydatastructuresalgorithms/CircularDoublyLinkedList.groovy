@@ -55,12 +55,10 @@ class CircularDoublyLinkedList<V> {
         ListNode<V> node// = new LinkedMapNode<K,V>(key, value);
         if (size % 2 == 0) {
             node = addToHead(value)
-            // System.out.println("Stored at Head Node: " + key + ':' + value);
             return node
         }
         if (size % 2 != 0) {
             node = addToTail(value)
-            //   System.out.println("Stored at Tail Node: " + key + ':' + value);
             return node
         }
         return null
@@ -212,99 +210,4 @@ class CircularDoublyLinkedList<V> {
         }
         return cdll.iterator()
     }
-/*
-    private boolean isEven(int value) {
-        if (value % 2 == 0) {
-            return true
-        }
-        return false
-    }
-
-    boolean headHasNext() {
-        if (head.Next() != null) {
-            return true
-        }
-        return false
-    }
-
-    boolean headHasPrev() {
-        if (head.Prev() != null) {
-            return true
-        }
-        return false
-    }
-
-    boolean tailHasNext() {
-        if (tail.Next() != null) {
-            return true
-        }
-        return false
-    }
-
-    boolean tailHasPrev() {
-        if (tail.Prev() != null) {
-            return true
-        }
-        return false
-    }
-
-    V searchNextValue(V value) {
-        while (headHasNext()) {
-            head = head.Next()
-            if (head.getValue().equals(value)) {
-                return head.getValue()
-            }
-        }
-        return null
-    }
-
-    V searchPrevValue(V value) {
-        while (tailHasPrev()) {
-            tail = tail.Prev()
-            if (tail.getValue().equals(value)) {
-                return tail.getValue()
-            }
-        }
-        return null
-    }
-
-    V quickSearch(V value) {
-        ListNode<V> other = new ListNode<V>(value)
-        if (other.getValue() == null) {
-            return null
-        }
-        if (countHead(value) <= countTail(value)) {
-            other.setValue(searchNextValue(value))
-        }
-        if (countHead(value) > countTail(value)) {
-            other.setValue(searchPrevValue(value))
-        }
-        other.setValue(value)
-        return value
-    }
-
-    private int countHead(V value) {
-        int count = 0
-        while (headHasNext()) {
-            head = head.Next()
-            count++
-            if (head.getValue().equals(value)) {
-                break
-            }
-        }
-        return count
-    }
-
-    private int countTail(V value) {
-        int count = 0
-        while (tailHasPrev()) {
-            tail = tail.Prev()
-            count++
-            if (tail.getValue().equals(value)) {
-                break
-            }
-        }
-        return count
-    }
-    */
 }

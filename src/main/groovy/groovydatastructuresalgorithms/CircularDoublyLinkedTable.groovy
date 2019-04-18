@@ -55,12 +55,10 @@ class CircularDoublyLinkedTable<R, C, V> {
         TableNode<R, C, V> node// = new LinkedMapNode<K,V>(key, value);
         if (size % 2 == 0) {
             node = putToHead(row, column, value)
-            // System.out.println("Stored at Head Node: " + key + ':' + value);
             return node
         }
         if (size % 2 != 0) {
             node = putToTail(row, column, value)
-            //   System.out.println("Stored at Tail Node: " + key + ':' + value);
             return node
         }
         return null
@@ -244,93 +242,5 @@ class CircularDoublyLinkedTable<R, C, V> {
             head = head.Next();
             size--;
         }
-    }
-
-    boolean headHasNext() {
-        if (head.Next() != null) {
-            return true
-        }
-        return false
-    }
-
-    boolean headHasPrev() {
-        if (head.Prev() != null) {
-            return true
-        }
-        return false
-    }
-
-    boolean tailHasNext() {
-        if (tail.Next() != null) {
-            return true
-        }
-        return false
-    }
-
-    boolean tailHasPrev() {
-        if (tail.Prev() != null) {
-            return true
-        }
-        return false
-    }
-
-    R searchNextRow(R row) {
-        while (headHasNext()) {
-            head = head.Next()
-            if (head.getRow().equals(row)) {
-                return head.getRow()
-            }
-        }
-        return null
-    }
-
-    C searchNextColumn(C column) {
-        while (headHasNext()) {
-            head = head.Next()
-            if (head.getColumn().equals(column)) {
-                return head.getColumn()
-            }
-        }
-        return null
-    }
-
-    V searchNextValue(V value) {
-        while (headHasNext()) {
-            head = head.Next()
-            if (head.getValue().equals(value)) {
-                return head.getValue()
-            }
-        }
-        return null
-    }
-
-    R searchPrevRow(R row) {
-        while (tailHasPrev()) {
-            tail = tail.Prev()
-            if (tail.getRow().equals(row)) {
-                return tail.getRow()
-            }
-        }
-        return null
-    }
-
-    C searchPrevColumn(C column) {
-        while (tailHasPrev()) {
-            tail = tail.Prev()
-            if (tail.getColumn().equals(column)) {
-                return tail.getColumn()
-            }
-        }
-        return null
-    }
-
-    V searchPrevValue(V value) {
-        while (tailHasPrev()) {
-            tail = tail.Prev()
-            if (tail.getValue().equals(value)) {
-                return tail.getValue()
-            }
-        }
-        return null
     }
 }
