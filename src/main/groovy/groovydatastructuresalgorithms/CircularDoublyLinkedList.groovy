@@ -1,7 +1,22 @@
+/*
+ * Copyright [2018] [Martin Kelly]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package groovydatastructuresalgorithms
 
 import groovydatastructuresalgorithms.Nodes.ListNode
-
 
 class CircularDoublyLinkedList<V> {
 
@@ -38,12 +53,12 @@ class CircularDoublyLinkedList<V> {
 
     ListNode<V> add(V value) {
         ListNode<V> node// = new LinkedMapNode<K,V>(key, value);
-        if (isEven(size)) {
+        if (size % 2 == 0) {
             node = addToHead(value)
             // System.out.println("Stored at Head Node: " + key + ':' + value);
             return node
         }
-        if (!isEven(size)) {
+        if (size % 2 != 0) {
             node = addToTail(value)
             //   System.out.println("Stored at Tail Node: " + key + ':' + value);
             return node
@@ -197,7 +212,7 @@ class CircularDoublyLinkedList<V> {
         }
         return cdll.iterator()
     }
-
+/*
     private boolean isEven(int value) {
         if (value % 2 == 0) {
             return true
@@ -291,4 +306,5 @@ class CircularDoublyLinkedList<V> {
         }
         return count
     }
+    */
 }

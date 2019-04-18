@@ -17,6 +17,7 @@ Currently doesn't contain all the data structure.
 
 #### Hashing (Work In Progress):
 * Contains a New API for creating data structures using hash algorithms.
+* Currently contains methods for Seperate Chaining & Open Addressing using Cuckoo
 
 ## Apache Licence 2.0
 Copyright [2018] [Martin Kelly]

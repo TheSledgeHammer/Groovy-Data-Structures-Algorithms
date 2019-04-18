@@ -1,18 +1,33 @@
+/*
+ * Copyright [2018] [Martin Kelly]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package groovydatastructuresalgorithms
 
-import groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryNode
-import groovydatastructuresalgorithms.Nodes.MapNode
+import groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryNodeCH
 
 //Follows a doublylinkedlist, but each node is hashed/ rehashed from a HashBucketEntryNode
 //Collisions are resolved using a variation on Cuckoo Hashing
 class GHashTable<K, V> {
 
-    private HashBucketEntryNode.HashingMap<K, V> head
-    private HashBucketEntryNode.HashingMap<K, V> tail
+    private HashBucketEntryNodeCH.HashingMap<K, V> head
+    private HashBucketEntryNodeCH.HashingMap<K, V> tail
     private int size
 
     GHashTable(K key, V value) {
-        head = new HashBucketEntryNode.HashingMap<K, V>(key, value)
+        head = new HashBucketEntryNodeCH.HashingMap<K, V>(key, value)
     }
 
     GHashTable() {
@@ -23,8 +38,8 @@ class GHashTable<K, V> {
         return size
     }
 
-    HashBucketEntryNode.HashingMap<K, V> put(K key, V value) {
-        HashBucketEntryNode.HashingMap<K, V> node = new HashBucketEntryNode.HashingMap<K, V>(key, value)
+    HashBucketEntryNodeCH.HashingMap<K, V> put(K key, V value) {
+        HashBucketEntryNodeCH.HashingMap<K, V> node = new HashBucketEntryNodeCH.HashingMap<K, V>(key, value)
         if (size == 0 || head == null) {
             node.setNext(node)
             node.setPrev(node)
@@ -67,8 +82,8 @@ class GHashTable<K, V> {
         return -1;
     }
 
-    private HashBucketEntryNode.HashingMap<K, V> getNode(int i) {
-        HashBucketEntryNode.HashingMap<K, V> p = null
+    private HashBucketEntryNodeCH.HashingMap<K, V> getNode(int i) {
+        HashBucketEntryNodeCH.HashingMap<K, V> p = null
         if (i < size / 2) {
             p = head.Next()
             for (int j = 0; j < i; j++) {
@@ -155,7 +170,7 @@ class GHashTable<K, V> {
         return head.HashBucketLoad()
     }
 
-    private void Resize(HashBucketEntryNode.HashingMap<K, V> node) {
+    private void Resize(HashBucketEntryNodeCH.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() * 2);
     }
 }

@@ -1,5 +1,20 @@
-package groovydatastructuresalgorithms
+/*
+ * Copyright [2018] [Martin Kelly]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+package groovydatastructuresalgorithms
 
 import groovydatastructuresalgorithms.Nodes.MapNode
 
@@ -39,12 +54,12 @@ class CircularDoublyLinkedMap<K, V> {
     //Adds key-value pair to head or tail node depending on if size is even or odd numbered
     MapNode<K, V> put(K key, V value) {
         MapNode<K, V> node// = new LinkedMapNode<K,V>(key, value);
-        if (isEven(size)) {
+        if (size % 2 == 0) {
             node = putToHead(key, value)
             // System.out.println("Stored at Head Node: " + key + ':' + value);
             return node
         }
-        if (!isEven(size)) {
+        if (size % 2 != 0) {
             node = putToTail(key, value)
             //   System.out.println("Stored at Tail Node: " + key + ':' + value);
             return node
@@ -162,7 +177,7 @@ class CircularDoublyLinkedMap<K, V> {
         return null
     }
 
-    void deleteFromHead() {
+    void removeFromHead() {
         if (size == 0) {
             return
         } else {
@@ -172,11 +187,11 @@ class CircularDoublyLinkedMap<K, V> {
         }
     }
 
-    void deleteFromTail() {
+    void removeFromTail() {
         if (size == 0) {
             return
         } else if (size == 1) {
-            deleteFromHead()
+            removeFromHead()
         } else {
             V x = tail.getValue()
             MapNode<K, V> prevTail = tail.Prev()
@@ -300,7 +315,7 @@ class CircularDoublyLinkedMap<K, V> {
         other.setValue(value)
         return value
     }
-    */
+
 
     private int countHead(V value) {
         int count = 0
@@ -332,9 +347,8 @@ class CircularDoublyLinkedMap<K, V> {
         }
         return false
     }
-
+*/
 }
-
 /*
     int indexOfKey(K key) {
         int index = 0

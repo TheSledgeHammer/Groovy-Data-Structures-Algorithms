@@ -1,5 +1,7 @@
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryNodeSC
+
 class Testing {
 
     static void main(String[] args) {
@@ -10,10 +12,12 @@ class Testing {
         //GHT.put(2, 21);
         //GHT.Col(3, 3)
 
-        println GHT.get(4)
+        //println GHT.get(4)
 
-        CircularDoublyLinkedMap<Integer, Integer> HM = new CircularDoublyLinkedMap<>();
-        HM.put(1, 23);
+        HashBucketEntryNodeSC.HashingMap<Integer, Integer> SC = new HashBucketEntryNodeSC.HashingMap<Integer, Integer>();
+        SC.putEntry(1, 32);
+        SC.removeEntry(1)
+        println SC.getEntry(1)
     }
 }
 

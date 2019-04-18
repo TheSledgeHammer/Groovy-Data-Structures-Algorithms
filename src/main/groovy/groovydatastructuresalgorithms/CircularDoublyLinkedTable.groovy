@@ -1,3 +1,19 @@
+/*
+ * Copyright [2018] [Martin Kelly]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package groovydatastructuresalgorithms
 
 import groovydatastructuresalgorithms.Nodes.TableNode
@@ -33,6 +49,21 @@ class CircularDoublyLinkedTable<R, C, V> {
 
     int size() {
         return size
+    }
+
+    TableNode<R, C, V> put(R row, C column, V value) {
+        TableNode<R, C, V> node// = new LinkedMapNode<K,V>(key, value);
+        if (size % 2 == 0) {
+            node = putToHead(row, column, value)
+            // System.out.println("Stored at Head Node: " + key + ':' + value);
+            return node
+        }
+        if (size % 2 != 0) {
+            node = putToTail(row, column, value)
+            //   System.out.println("Stored at Tail Node: " + key + ':' + value);
+            return node
+        }
+        return null
     }
 
     TableNode<R, C, V> putToHead(R row, C column, V value) {
@@ -139,6 +170,42 @@ class CircularDoublyLinkedTable<R, C, V> {
             return index;
         }
         return -1;
+    }
+
+    boolean containsRow(R row) {
+        if (row == null) {
+            throw new IllegalArgumentException("argument to contains() is null")
+        }
+        for(int i = 0; i < size; i++) {
+            if(getNode(i).getRow() == row) {
+                return getNode(i).getRow() != null
+            }
+        }
+        return false;
+    }
+
+    boolean containsColumn(C column) {
+        if (column == null) {
+            throw new IllegalArgumentException("argument to contains() is null")
+        }
+        for(int i = 0; i < size; i++) {
+            if(getNode(i).getColumn() == column) {
+                return getNode(i).getColumn() != null
+            }
+        }
+        return false;
+    }
+
+    boolean containsValue(V value) {
+        if(value == null) {
+            throw new IllegalArgumentException("argument to contains() is null")
+        }
+        for(int i = 0; i < size; i++) {
+            if(getNode(i).getValue() == value) {
+                return getNode(i).getValue() != null
+            }
+        }
+        return false;
     }
 
     void removeFromHead() {
