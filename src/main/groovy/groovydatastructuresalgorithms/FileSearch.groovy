@@ -16,6 +16,9 @@
 
 package groovydatastructuresalgorithms
 
+import com.google.common.collect.LinkedListMultimap
+import com.google.common.collect.Multimap
+
 /**
  * File Searching methods are independent of each other.
  * So using SearchFile() does not require SearchDirectories() or vice-versa.

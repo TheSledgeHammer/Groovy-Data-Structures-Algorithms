@@ -39,7 +39,10 @@ class HashBucketEntryCHNode {
 
     static class HashingList<V> extends ListNode<V> {
 
-        private final List<HashingList<V>> entries = new LinkedList<>()
+        private final CircularDoublyLinkedMap<Integer, HashingList<V>> table1 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingList<V>> table2 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingList<V>> table3 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingList<V>> table4 = new CircularDoublyLinkedMap<>();
 
         HashingList(V value, int capacity, double loadFactor) {
             super(value)
@@ -60,38 +63,98 @@ class HashBucketEntryCHNode {
         }
 
         HashingList<V> addEntry(V value) {
-            HashingList<V> node = new HashingList<>(value)
-            int idx = SHA1(key)
-            entries.add(bucketEntries[idx], node)
-            return node
-        }
-
-        //TODO: Fix so index equals value
-        V getEntry(int index) {
-            HashingList<V> node
-            int idx = SHA1()
-            return node
-        }
-
-        void deleteEntry(V value) {
-            int idx = SHA1(value)
-            if (entries.get(bucketEntries[idx]).equals(getEntry(value))) {
-                entries.remove(bucketEntries[idx])
+            HashingList<V> node = new HashingList(value);
+            if(table1 == null || table1.isEmpty() && table2 == null || table2.isEmpty() && table3 == null || table3.isEmpty() && table4 == null || table4.isEmpty()) {
+                table1.put(bucketEntries[MD5(value)], node);
+                table2.put(bucketEntries[SHA1(value)], node);
+                table3.put(bucketEntries[FNV1A(value)], node);
+                table4.put(bucketEntries[MURMUR3(value)], node);
             }
+            //MD5
+            if(table1.containsKey(bucketEntries[MD5(key)]) && table1 != null) {
+                HashingList<V> prev = table1.get(bucketEntries[MD5(value)]);
+                if(!table2.containsKey(bucketEntries[SHA1(value)])) {
+                    table2.put(bucketEntries[SHA1(value)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(value)])) {
+                    table3.put(bucketEntries[FNV1A(value)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                    table4.put(bucketEntries[MURMUR3(value)], prev);
+                }
+                table1.put(bucketEntries[MD5(value)], node);
+            }
+            //SHA1
+            if(table2.containsKey(bucketEntries[SHA1(value)]) && table2 != null) {
+                HashingList<V> prev = table2.get(bucketEntries[SHA1(value)]);
+                if(!table1.containsKey(bucketEntries[MD5(value)])) {
+                    table1.put(bucketEntries[MD5(value)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(value)])) {
+                    table3.put(bucketEntries[FNV1A(value)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                    table4.put(bucketEntries[MURMUR3(value)], prev);
+                }
+                table2.put(bucketEntries[SHA1(value)], node);
+            }
+            //FNV1A
+            if(table3.containsKey(bucketEntries[FNV1A(value)]) && table3 != null) {
+                HashingList<V> prev = table3.get(bucketEntries[FNV1A(value)]);
+                if(!table1.containsKey(bucketEntries[MD5(value)])) {
+                    table1.put(bucketEntries[MD5(value)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(value)])) {
+                    table2.put(bucketEntries[SHA1(value)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                    table4.put(bucketEntries[MURMUR3(value)], prev);
+                }
+                table3.put(bucketEntries[FNV1A(value)], node);
+            }
+            //MURMUR3
+            if(table4.containsKey(bucketEntries[MURMUR3(value)]) && table4 != null) {
+                HashingList<V> prev = table4.get(bucketEntries[MURMUR3(value)]);
+                if(!table1.containsKey(bucketEntries[MD5(value)])) {
+                    table1.put(bucketEntries[MD5(value)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(value)])) {
+                    table2.put(bucketEntries[SHA1(value)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(value)])) {
+                    table3.put(bucketEntries[FNV1A(value)], prev);
+                }
+                table4.put(bucketEntries[MURMUR3(value)], node);
+            }
+
+            table1.put(bucketEntries[MD5(value)], node);
+            table2.put(bucketEntries[SHA1(value)], node);
+            table3.put(bucketEntries[FNV1A(value)], node);
+            table4.put(bucketEntries[MURMUR3(value)], node);
+            return node;
         }
 
-        //Default Hash Algorithm
-        private int Hash(V value) {
-            int hash = (value.hashCode() % buckets.getCapacity())
-            return hash
+        V getEntry(V value) {
+            if(table1.get(bucketEntries[MD5(value)]).getValue() == value) {
+                return table1.get(bucketEntries[MD5(value)]).getValue();
+            }
+            if(table2.get(bucketEntries[SHA1(value)]).getValue() == value) {
+                return table2.get(bucketEntries[SHA1(value)]).getValue();
+            }
+            if(table3.get(bucketEntries[FNV1A(value)]).getValue() == value) {
+                return table3.get(bucketEntries[FNV1A(key)]).getValue();
+            }
+            if(table4.get(bucketEntries[MURMUR3(value)]).getValue() == value) {
+                return table4.get(bucketEntries[MURMUR3(value)]).getValue();
+            }
+            return null;
         }
 
-        private int SHA1(V value) {
-            MessageDigest md = MessageDigest.getInstance("SHA1")
-            byte[] messageDigest = md.digest(value.toString().getBytes())
-            BigInteger no = new BigInteger(1, messageDigest)
-            int hash = no % buckets.getCapacity()
-            return hash
+        void removeEntry(V value) {
+            if (table1.containsKey(bucketEntries[MD5(value)])) {
+                table1.remove(bucketEntries[MD5(value)])
+            }
+            if (table2.containsKey(bucketEntries[SHA1(value)])) {
+                table2.remove(bucketEntries[SHA1(value)])
+            }
+            if(table3.containsKey(bucketEntries[FNV1A(value)])) {
+                table3.remove(bucketEntries[FNV1A(value)]);
+            }
+            if(table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                table4.remove(bucketEntries[MURMUR3(value)]);
+            }
         }
 
         //Node Access to Bucket
@@ -114,11 +177,47 @@ class HashBucketEntryCHNode {
         final int HashBucketLoad() {
             return buckets.HashBucketLoad()
         }
+
+        private int MD5(V value) {
+            MessageDigest md = MessageDigest.getInstance("MD5")
+            byte[] messageDigest = md.digest(value.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int SHA1(V value) {
+            MessageDigest md = MessageDigest.getInstance("SHA1")
+            byte[] messageDigest = md.digest(value.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int FNV1A(V value) {
+            byte[] digest = FNV.fnv1a(value.toString().getBytes(), 128);
+            BigInteger no = new BigInteger(1, digest);
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int MURMUR3(V value) {
+            HashFunction hf = Hashing.murmur3_128()
+            HashCode hc = hf.newHasher()
+                    .putBytes(value.toString().getBytes())
+                    .hash()
+            BigInteger no = new BigInteger(1, hc.asBytes())
+            int hash = no % buckets.getCapacity();
+            return hash;
+        }
     }
 
     static class HashingTree<V> extends TreeNode<V> {
 
-        private final List<HashingTree<V>> entries = new LinkedList<>()
+        private final CircularDoublyLinkedMap<Integer, HashingTree<V>> table1 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingTree<V>> table2 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingTree<V>> table3 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingTree<V>> table4 = new CircularDoublyLinkedMap<>();
 
         HashingTree(V value, int capacity, double loadFactor) {
             super(value)
@@ -139,38 +238,98 @@ class HashBucketEntryCHNode {
         }
 
         HashingTree<V> addEntry(V value) {
-            HashingTree<V> node = new HashingTree<>(value)
-            int idx = SHA1(value)
-            entries.add(bucketEntries[idx], node)
-            return node
-        }
-
-        //TODO: Fix so index equals value
-        V getEntry(int index) {
-            HashingTree<V> node
-            int idx = SHA1()
-            return node
-        }
-
-        void deleteEntry(V value) {
-            int idx = SHA1(value)
-            if (entries.get(bucketEntries[idx]).equals(getEntry(value))) {
-                entries.remove(bucketEntries[idx])
+            HashingTree<V> node = new HashingTree(value);
+            if(table1 == null || table1.isEmpty() && table2 == null || table2.isEmpty() && table3 == null || table3.isEmpty() && table4 == null || table4.isEmpty()) {
+                table1.put(bucketEntries[MD5(value)], node);
+                table2.put(bucketEntries[SHA1(value)], node);
+                table3.put(bucketEntries[FNV1A(value)], node);
+                table4.put(bucketEntries[MURMUR3(value)], node);
             }
+            //MD5
+            if(table1.containsKey(bucketEntries[MD5(key)]) && table1 != null) {
+                HashingTree<V> prev = table1.get(bucketEntries[MD5(value)]);
+                if(!table2.containsKey(bucketEntries[SHA1(value)])) {
+                    table2.put(bucketEntries[SHA1(value)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(value)])) {
+                    table3.put(bucketEntries[FNV1A(value)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                    table4.put(bucketEntries[MURMUR3(value)], prev);
+                }
+                table1.put(bucketEntries[MD5(value)], node);
+            }
+            //SHA1
+            if(table2.containsKey(bucketEntries[SHA1(value)]) && table2 != null) {
+                HashingTree<V> prev = table2.get(bucketEntries[SHA1(value)]);
+                if(!table1.containsKey(bucketEntries[MD5(value)])) {
+                    table1.put(bucketEntries[MD5(value)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(value)])) {
+                    table3.put(bucketEntries[FNV1A(value)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                    table4.put(bucketEntries[MURMUR3(value)], prev);
+                }
+                table2.put(bucketEntries[SHA1(value)], node);
+            }
+            //FNV1A
+            if(table3.containsKey(bucketEntries[FNV1A(value)]) && table3 != null) {
+                HashingTree<V> prev = table3.get(bucketEntries[FNV1A(value)]);
+                if(!table1.containsKey(bucketEntries[MD5(value)])) {
+                    table1.put(bucketEntries[MD5(value)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(value)])) {
+                    table2.put(bucketEntries[SHA1(value)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                    table4.put(bucketEntries[MURMUR3(value)], prev);
+                }
+                table3.put(bucketEntries[FNV1A(value)], node);
+            }
+            //MURMUR3
+            if(table4.containsKey(bucketEntries[MURMUR3(value)]) && table4 != null) {
+                HashingTree<V> prev = table4.get(bucketEntries[MURMUR3(value)]);
+                if(!table1.containsKey(bucketEntries[MD5(value)])) {
+                    table1.put(bucketEntries[MD5(value)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(value)])) {
+                    table2.put(bucketEntries[SHA1(value)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(value)])) {
+                    table3.put(bucketEntries[FNV1A(value)], prev);
+                }
+                table4.put(bucketEntries[MURMUR3(value)], node);
+            }
+
+            table1.put(bucketEntries[MD5(value)], node);
+            table2.put(bucketEntries[SHA1(value)], node);
+            table3.put(bucketEntries[FNV1A(value)], node);
+            table4.put(bucketEntries[MURMUR3(value)], node);
+            return node;
         }
 
-        //Default Hash Algorithm
-        private int Hash(V value) {
-            int hash = (value.hashCode() % buckets.getCapacity())
-            return hash
+        V getEntry(V value) {
+            if(table1.get(bucketEntries[MD5(value)]).getValue() == value) {
+                return table1.get(bucketEntries[MD5(value)]).getValue();
+            }
+            if(table2.get(bucketEntries[SHA1(value)]).getValue() == value) {
+                return table2.get(bucketEntries[SHA1(value)]).getValue();
+            }
+            if(table3.get(bucketEntries[FNV1A(value)]).getValue() == value) {
+                return table3.get(bucketEntries[FNV1A(key)]).getValue();
+            }
+            if(table4.get(bucketEntries[MURMUR3(value)]).getValue() == value) {
+                return table4.get(bucketEntries[MURMUR3(value)]).getValue();
+            }
+            return null;
         }
 
-        private int SHA1(V value) {
-            MessageDigest md = MessageDigest.getInstance("SHA1")
-            byte[] messageDigest = md.digest(value.toString().getBytes())
-            BigInteger no = new BigInteger(1, messageDigest)
-            int hash = no % buckets.getCapacity()
-            return hash
+        void removeEntry(V value) {
+            if (table1.containsKey(bucketEntries[MD5(value)])) {
+                table1.remove(bucketEntries[MD5(value)])
+            }
+            if (table2.containsKey(bucketEntries[SHA1(value)])) {
+                table2.remove(bucketEntries[SHA1(value)])
+            }
+            if(table3.containsKey(bucketEntries[FNV1A(value)])) {
+                table3.remove(bucketEntries[FNV1A(value)]);
+            }
+            if(table4.containsKey(bucketEntries[MURMUR3(value)])) {
+                table4.remove(bucketEntries[MURMUR3(value)]);
+            }
         }
 
         int getCapacity() {
@@ -191,6 +350,39 @@ class HashBucketEntryCHNode {
 
         final int HashBucketLoad() {
             return buckets.HashBucketLoad()
+        }
+
+        private int MD5(V value) {
+            MessageDigest md = MessageDigest.getInstance("MD5")
+            byte[] messageDigest = md.digest(value.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int SHA1(V value) {
+            MessageDigest md = MessageDigest.getInstance("SHA1")
+            byte[] messageDigest = md.digest(value.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int FNV1A(V value) {
+            byte[] digest = FNV.fnv1a(value.toString().getBytes(), 128);
+            BigInteger no = new BigInteger(1, digest);
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int MURMUR3(V value) {
+            HashFunction hf = Hashing.murmur3_128()
+            HashCode hc = hf.newHasher()
+                    .putBytes(value.toString().getBytes())
+                    .hash()
+            BigInteger no = new BigInteger(1, hc.asBytes())
+            int hash = no % buckets.getCapacity();
+            return hash;
         }
     }
 
@@ -314,6 +506,26 @@ class HashBucketEntryCHNode {
             }
         }
 
+        int getCapacity() {
+            return buckets.getCapacity()
+        }
+
+        double getLoadFactor() {
+            return buckets.getLoadFactor()
+        }
+
+        void setCapacity(int capacity) {
+            buckets.setCapacity(capacity)
+        }
+
+        void setLoadFactor(double loadFactor) {
+            buckets.setLoadFactor(loadFactor)
+        }
+
+        final int HashBucketLoad() {
+            return buckets.HashBucketLoad();
+        }
+
         private int MD5(K key) {
             MessageDigest md = MessageDigest.getInstance("MD5")
             byte[] messageDigest = md.digest(key.toString().getBytes())
@@ -346,31 +558,14 @@ class HashBucketEntryCHNode {
             int hash = no % buckets.getCapacity();
             return hash;
         }
-
-        int getCapacity() {
-            return buckets.getCapacity()
-        }
-
-        double getLoadFactor() {
-            return buckets.getLoadFactor()
-        }
-
-        void setCapacity(int capacity) {
-            buckets.setCapacity(capacity)
-        }
-
-        void setLoadFactor(double loadFactor) {
-            buckets.setLoadFactor(loadFactor)
-        }
-
-        final int HashBucketLoad() {
-            return buckets.HashBucketLoad();
-        }
     }
 
     static class HashingTable<R, C, V> extends TableNode<R, C, V> {
 
-        private final List<HashingTable<R, C, V>> entries = new LinkedList<>()
+        private final CircularDoublyLinkedMap<Integer, HashingTable<R, C, V>> table1 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingTable<R, C, V>> table2 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingTable<R, C, V>> table3 = new CircularDoublyLinkedMap<>();
+        private final CircularDoublyLinkedMap<Integer, HashingTable<R, C, V>> table4 = new CircularDoublyLinkedMap<>();
 
         HashingTable(R row, C column, V value, int capacity, double loadFactor) {
             super(row, column, value)
@@ -392,42 +587,97 @@ class HashBucketEntryCHNode {
 
         HashingTable<R, C, V> putEntry(R row, C column, V value) {
             HashingTable<R, C, V> node = new HashingTable<>(row, column, value)
-            int idx = SHA1(row, column)
-            entries.add(bucketEntries[idx], node)
-            return node
+            if(table1 == null || table1.isEmpty() && table2 == null || table2.isEmpty() && table3 == null || table3.isEmpty() && table4 == null || table4.isEmpty()) {
+                table1.put(bucketEntries[MD5(row, column)], node);
+                table2.put(bucketEntries[SHA1(row, column)], node);
+                table3.put(bucketEntries[FNV1A(row, column)], node);
+                table4.put(bucketEntries[MURMUR3(row, column)], node);
+            }
+            //MD5
+            if(table1.containsKey(bucketEntries[MD5(row, column)]) && table1 != null) {
+                HashingTable<R, C, V> prev = table1.get(bucketEntries[MD5(row, column)]);
+                if(!table2.containsKey(bucketEntries[SHA1(row, column)])) {
+                    table2.put(bucketEntries[SHA1(row, column)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(row, column)])) {
+                    table3.put(bucketEntries[FNV1A(row, column)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(row, column)])) {
+                    table4.put(bucketEntries[MURMUR3(row, column)], prev);
+                }
+                table1.put(bucketEntries[MD5(row, column)], node);
+            }
+            //SHA1
+            if(table2.containsKey(bucketEntries[SHA1(row, column)]) && table2 != null) {
+                HashingTable<R, C, V> prev = table2.get(bucketEntries[SHA1(row, column)]);
+                if(!table1.containsKey(bucketEntries[MD5(row, column)])) {
+                    table1.put(bucketEntries[MD5(row, column)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(row, column)])) {
+                    table3.put(bucketEntries[FNV1A(row, column)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(row, column)])) {
+                    table4.put(bucketEntries[MURMUR3(row, column)], prev);
+                }
+                table2.put(bucketEntries[SHA1(row, column)], node);
+            }
+            //FNV1A
+            if(table3.containsKey(bucketEntries[FNV1A(row, column)]) && table3 != null) {
+                HashingTable<R, C, V> prev = table3.get(bucketEntries[FNV1A(row, column)]);
+                if(!table1.containsKey(bucketEntries[MD5(row, column)])) {
+                    table1.put(bucketEntries[MD5(row, column)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(row, column)])) {
+                    table2.put(bucketEntries[SHA1(row, column)], prev);
+                } else if(!table4.containsKey(bucketEntries[MURMUR3(row, column)])) {
+                    table4.put(bucketEntries[MURMUR3(row, column)], prev);
+                }
+                table3.put(bucketEntries[FNV1A(row, column)], node);
+            }
+            //MURMUR3
+            if(table4.containsKey(bucketEntries[MURMUR3(row, column)]) && table4 != null) {
+                HashingTable<R, C, V> prev = table4.get(bucketEntries[MURMUR3(row, column)]);
+                if(!table1.containsKey(bucketEntries[MD5(row, column)])) {
+                    table1.put(bucketEntries[MD5(row, column)], prev);
+                } else if(!table2.containsKey(bucketEntries[SHA1(row, column)])) {
+                    table2.put(bucketEntries[SHA1(row, column)], prev);
+                } else if(!table3.containsKey(bucketEntries[FNV1A(row, column)])) {
+                    table3.put(bucketEntries[FNV1A(row, column)], prev);
+                }
+                table4.put(bucketEntries[MURMUR3(row, column)], node);
+            }
+
+            table1.put(bucketEntries[MD5(row, column)], node);
+            table2.put(bucketEntries[SHA1(row, column)], node);
+            table3.put(bucketEntries[FNV1A(row, column)], node);
+            table4.put(bucketEntries[MURMUR3(row, column)], node);
+            return node;
         }
 
         V getEntry(R row, C column) {
-            int idx = SHA1(row, column)
-            HashingTable<R, C, V> node = entries.get(bucketEntries[idx])
-            while (node != null) {
-                if (node.getRow() == row && node.getColumn() == column) {
-                    return node.getValue()
-                }
-                node = node.Next()
+            if(table1.get(bucketEntries[MD5(row, column)]).getRow() == row && table1.get(bucketEntries[MD5(row, column)]).getColumn() == column) {
+                return table1.get(bucketEntries[MD5(row, column)]).getValue();
             }
-            return null
-        }
-
-        void deleteEntry(R row, C column) {
-            int idx = SHA1(row, column)
-            if (entries.get(bucketEntries[idx]).equals(getEntry(row, column))) {
-                entries.remove(bucketEntries[idx])
+            if(table2.get(bucketEntries[SHA1(row, column)]).getRow() == row && table2.get(bucketEntries[SHA1(row, column)]).getColumn() == column) {
+                return table2.get(bucketEntries[SHA1(row, column)]).getValue();
             }
+            if(table3.get(bucketEntries[FNV1A(row, column)]).getRow() == row && table3.get(bucketEntries[FNV1A(row, column)]).getColumn() == column) {
+                return table3.get(bucketEntries[FNV1A(row, column)]).getValue();
+            }
+            if(table4.get(bucketEntries[MURMUR3(row, column)]).getRow() == row && table4.get(bucketEntries[MURMUR3(row, column)]).getColumn() == column) {
+                return table4.get(bucketEntries[MURMUR3(row, column)]).getValue();
+            }
+            return null;
         }
 
-        private int Hash(R row, C column) {
-            int hash = (row.hashCode() + column.hashCode() % buckets.getCapacity())
-            return hash
-        }
-
-        private int SHA1(R row, C column) {
-            MessageDigest md = MessageDigest.getInstance("SHA1")
-            byte[] messageDigest1 = md.digest(row.toString().getBytes())
-            byte[] messageDigest2 = md.digest(column.toString().getBytes())
-            BigInteger no = new BigInteger(1, messageDigest1 + messageDigest2)
-            int hash = no % buckets.getCapacity()
-            return hash
+        void removeEntry(R row, C column) {
+            if (table1.containsKey(bucketEntries[MD5(row, column)])) {
+                table1.remove(bucketEntries[MD5(row, column)])
+            }
+            if (table2.containsKey(bucketEntries[SHA1(row, column)])) {
+                table2.remove(bucketEntries[SHA1(row, column)])
+            }
+            if(table3.containsKey(bucketEntries[FNV1A(row, column)])) {
+                table3.remove(bucketEntries[FNV1A(row, column)]);
+            }
+            if(table4.containsKey(bucketEntries[MURMUR3(row, column)])) {
+                table4.remove(bucketEntries[MURMUR3(row, column)]);
+            }
         }
 
         int getCapacity() {
@@ -448,6 +698,43 @@ class HashBucketEntryCHNode {
 
         final int HashBucketLoad() {
             return buckets.HashBucketLoad()
+        }
+
+        private int MD5(R row, C column) {
+            MessageDigest md = MessageDigest.getInstance("MD5")
+            byte[] messageDigest1 = md.digest(row.toString().getBytes())
+            byte[] messageDigest2 = md.digest(column.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest1 + messageDigest2)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int SHA1(R row, C column) {
+            MessageDigest md = MessageDigest.getInstance("SHA1")
+            byte[] messageDigest1 = md.digest(row.toString().getBytes())
+            byte[] messageDigest2 = md.digest(column.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest1 + messageDigest2)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int FNV1A(R row, C column) {
+            byte[] digest1 = FNV.fnv1a(row.toString().getBytes(), 128);
+            byte[] digest2 = FNV.fnv1a(column.toString().getBytes(), 128);
+            BigInteger no = new BigInteger(1, digest1 + digest2);
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        private int MURMUR3(R row, C column) {
+            HashFunction hf = Hashing.murmur3_128()
+            HashCode hc = hf.newHasher()
+                    .putBytes(row.toString().getBytes())
+                    .putBytes(column.toString().getBytes())
+                    .hash()
+            BigInteger no = new BigInteger(1, hc.asBytes())
+            int hash = no % buckets.getCapacity();
+            return hash;
         }
     }
 }
