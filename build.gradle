@@ -25,14 +25,14 @@ repositories {
 		name = "Apache Groovy"
 		url = "https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all"
 	}
-  maven {
-    name = "Google Guava"
-    url = "https://mvnrepository.com/artifact/com.google.guava/guava"
-  }
+  	maven {
+		name = "Google Guava"
+		url = "https://mvnrepository.com/artifact/com.google.guava/guava"
+	}
 }
 
 dependencies {
-  compile "org.codehaus.groovy:groovy-all:${groovy_version}"
-  compile group: 'com.google.guava', name: 'guava', version: '27.1-jre'
+  compile "org.codehaus.groovy:groovy-all:2.5.7"
+  //compile group: 'com.google.guava', name: 'guava', version: '27.1-jre'
   //compile files("/lib/fnv-java-master")
 }
