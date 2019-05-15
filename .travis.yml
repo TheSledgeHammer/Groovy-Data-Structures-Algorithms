@@ -1,5 +1,0 @@
-dist: trusty
-sudo: required
-
-language: groovy
-before_install: chmod +x gradlew
