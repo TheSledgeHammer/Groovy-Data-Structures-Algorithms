@@ -21,6 +21,7 @@ import com.google.common.hash.HashFunction
 import com.google.common.hash.Hashing
 import fnv.FNV
 import groovydatastructuresalgorithms.CircularDoublyLinkedMap
+import groovydatastructuresalgorithms.api.interfaces.IHashBucketNode
 import groovydatastructuresalgorithms.api.nodes.ListNode
 import groovydatastructuresalgorithms.api.nodes.MapNode
 import groovydatastructuresalgorithms.api.nodes.TableNode
@@ -37,7 +38,7 @@ class HashBucketEntryCHNode {
     private static final int defaultCapacity = 11
     private static final double defaultLoadFactor = 0.9
 
-    static class HashingList<V> extends ListNode<V> {
+    static class HashingList<V> extends ListNode<V> implements IHashBucketNode {
 
         private final CircularDoublyLinkedMap<Integer, HashingList<V>> table1 = new CircularDoublyLinkedMap<>();
         private final CircularDoublyLinkedMap<Integer, HashingList<V>> table2 = new CircularDoublyLinkedMap<>();
@@ -158,22 +159,27 @@ class HashBucketEntryCHNode {
         }
 
         //Node Access to Bucket
+        @Override
         int getCapacity() {
             return buckets.getCapacity()
         }
 
+        @Override
         double getLoadFactor() {
             return buckets.getLoadFactor()
         }
 
+        @Override
         void setCapacity(int capacity) {
             buckets.setCapacity(capacity)
         }
 
+        @Override
         void setLoadFactor(double loadFactor) {
             buckets.setLoadFactor(loadFactor)
         }
 
+        @Override
         final int HashBucketLoad() {
             return buckets.HashBucketLoad()
         }
@@ -212,7 +218,7 @@ class HashBucketEntryCHNode {
         }
     }
 
-    static class HashingTree<V> extends TreeNode<V> {
+    static class HashingTree<V> extends TreeNode<V> implements IHashBucketNode {
 
         private final CircularDoublyLinkedMap<Integer, HashingTree<V>> table1 = new CircularDoublyLinkedMap<>();
         private final CircularDoublyLinkedMap<Integer, HashingTree<V>> table2 = new CircularDoublyLinkedMap<>();
@@ -332,22 +338,27 @@ class HashBucketEntryCHNode {
             }
         }
 
+        @Override
         int getCapacity() {
             return buckets.getCapacity()
         }
 
+        @Override
         double getLoadFactor() {
             return buckets.getLoadFactor()
         }
 
+        @Override
         void setCapacity(int capacity) {
             buckets.setCapacity(capacity)
         }
 
+        @Override
         void setLoadFactor(double loadFactor) {
             buckets.setLoadFactor(loadFactor)
         }
 
+        @Override
         final int HashBucketLoad() {
             return buckets.HashBucketLoad()
         }
@@ -386,7 +397,7 @@ class HashBucketEntryCHNode {
         }
     }
 
-    static class HashingMap<K, V> extends MapNode<K, V> {
+    static class HashingMap<K, V> extends MapNode<K, V> implements IHashBucketNode {
 
         private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table1 = new CircularDoublyLinkedMap<>();
         private final CircularDoublyLinkedMap<Integer, HashingMap<K, V>> table2 = new CircularDoublyLinkedMap<>();
@@ -506,22 +517,27 @@ class HashBucketEntryCHNode {
             }
         }
 
+        @Override
         int getCapacity() {
             return buckets.getCapacity()
         }
 
+        @Override
         double getLoadFactor() {
             return buckets.getLoadFactor()
         }
 
+        @Override
         void setCapacity(int capacity) {
             buckets.setCapacity(capacity)
         }
 
+        @Override
         void setLoadFactor(double loadFactor) {
             buckets.setLoadFactor(loadFactor)
         }
 
+        @Override
         final int HashBucketLoad() {
             return buckets.HashBucketLoad();
         }
@@ -560,7 +576,7 @@ class HashBucketEntryCHNode {
         }
     }
 
-    static class HashingTable<R, C, V> extends TableNode<R, C, V> {
+    static class HashingTable<R, C, V> extends TableNode<R, C, V> implements IHashBucketNode {
 
         private final CircularDoublyLinkedMap<Integer, HashingTable<R, C, V>> table1 = new CircularDoublyLinkedMap<>();
         private final CircularDoublyLinkedMap<Integer, HashingTable<R, C, V>> table2 = new CircularDoublyLinkedMap<>();
@@ -680,22 +696,27 @@ class HashBucketEntryCHNode {
             }
         }
 
+        @Override
         int getCapacity() {
             return buckets.getCapacity()
         }
 
+        @Override
         double getLoadFactor() {
             return buckets.getLoadFactor()
         }
 
+        @Override
         void setCapacity(int capacity) {
             buckets.setCapacity(capacity)
         }
 
+        @Override
         void setLoadFactor(double loadFactor) {
             buckets.setLoadFactor(loadFactor)
         }
 
+        @Override
         final int HashBucketLoad() {
             return buckets.HashBucketLoad()
         }

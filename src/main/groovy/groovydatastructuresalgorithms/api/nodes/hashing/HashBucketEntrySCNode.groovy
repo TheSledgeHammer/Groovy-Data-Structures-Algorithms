@@ -18,7 +18,10 @@ package groovydatastructuresalgorithms.api.nodes.hashing
 
 import groovydatastructuresalgorithms.CircularDoublyLinkedTable
 import groovydatastructuresalgorithms.api.interfaces.IHashBucketNode
+import groovydatastructuresalgorithms.api.nodes.ListNode
 import groovydatastructuresalgorithms.api.nodes.MapNode
+import groovydatastructuresalgorithms.api.nodes.TableNode
+import groovydatastructuresalgorithms.api.nodes.TreeNode
 
 import java.security.MessageDigest
 // HashBucketEntryNodeSC: Refers to Hashing using Seperate Chaining
@@ -28,6 +31,196 @@ class HashBucketEntrySCNode {
     private static int[] bucketEntries
     private static final int defaultCapacity = 11
     private static final double defaultLoadFactor = 0.6
+
+    static class HashingList<V> extends ListNode<V> implements IHashBucketNode {
+
+        CircularDoublyLinkedTable<Integer, Integer, ListNode<V>> table = new CircularDoublyLinkedTable<>();
+
+        HashingList(V value, int capacity, double loadFactor) {
+            super(value)
+            buckets = new HashBucketNode(capacity, loadFactor)
+            bucketEntries = new int[capacity]
+        }
+
+        HashingList(V value) {
+            super(value)
+            buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
+            bucketEntries = new int[defaultCapacity]
+        }
+
+        HashingList() {
+            super(null)
+            buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
+            bucketEntries = new int[defaultCapacity]
+        }
+
+        HashingTree<V> putEntry(V value) {
+            HashingList<V> node = new HashingList(value);
+            if(table == null || table.isEmpty()) {
+                table.put(bucketEntries[SHA1(value)], 0, node);
+            }
+            if(table.containsRow(bucketEntries[SHA1(value)]) && table != null) {
+                for(int i = 0; i < table.size(); i++) {
+                    if(table.indexOf(bucketEntries[SHA1(value)], i) == -1) {
+                        table.put(bucketEntries[SHA1(value)], i, node);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            table.put(bucketEntries[SHA1(value)], 0, node);
+            return node;
+        }
+
+        V getEntry(V value) {
+            for(int i = 0; i < table.size(); i++) {
+                if(table.indexOf(bucketEntries[SHA1(value)], i) != -1) {
+                    if(table.get(bucketEntries[SHA1(value)], i).getValue() == value) {
+                        return table.get(bucketEntries[SHA1(value)], i).getValue()
+                    }
+                }
+            }
+            return null;
+        }
+
+        void removeEntry(V value) {
+            for(int i = 0; i < table.size(); i++) {
+                if (table.indexOf(bucketEntries[SHA1(value)], i) != -1) {
+                    if (table.get(bucketEntries[SHA1(value)], i).getValue() == value) {
+                        table.remove(bucketEntries[SHA1(value)], i);
+                    }
+                }
+            }
+        }
+
+        private int SHA1(V value) {
+            MessageDigest md = MessageDigest.getInstance("SHA1")
+            byte[] messageDigest = md.digest(value.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        @Override
+        int getCapacity() {
+            return buckets.getCapacity()
+        }
+
+        @Override
+        double getLoadFactor() {
+            return buckets.getLoadFactor()
+        }
+
+        @Override
+        void setCapacity(int capacity) {
+            buckets.setCapacity(capacity)
+        }
+
+        @Override
+        void setLoadFactor(double loadFactor) {
+            buckets.setLoadFactor(loadFactor)
+        }
+
+        @Override
+        final int HashBucketLoad() {
+            return buckets.HashBucketLoad();
+        }
+    }
+
+    static class HashingTree<V> extends TreeNode<V> implements IHashBucketNode  {
+
+        CircularDoublyLinkedTable<Integer, Integer, TreeNode<V>> table = new CircularDoublyLinkedTable<>();
+
+        HashingTree(V value, int capacity, double loadFactor) {
+            super(value)
+            buckets = new HashBucketNode(capacity, loadFactor)
+            bucketEntries = new int[capacity]
+        }
+
+        HashingTree(V value) {
+            super(value)
+            buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
+            bucketEntries = new int[defaultCapacity]
+        }
+
+        HashingTree() {
+            super(null)
+            buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
+            bucketEntries = new int[defaultCapacity]
+        }
+
+        HashingTree<V> putEntry(V value) {
+            HashingTree<V> node = new HashingTree(value);
+            if(table == null || table.isEmpty()) {
+                table.put(bucketEntries[SHA1(value)], 0, node);
+            }
+            if(table.containsRow(bucketEntries[SHA1(value)]) && table != null) {
+                for(int i = 0; i < table.size(); i++) {
+                    if(table.indexOf(bucketEntries[SHA1(value)], i) == -1) {
+                        table.put(bucketEntries[SHA1(value)], i, node);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            table.put(bucketEntries[SHA1(value)], 0, node);
+            return node;
+        }
+
+        V getEntry(V value) {
+            for(int i = 0; i < table.size(); i++) {
+                if(table.indexOf(bucketEntries[SHA1(value)], i) != -1) {
+                    if(table.get(bucketEntries[SHA1(value)], i).getValue() == value) {
+                        return table.get(bucketEntries[SHA1(value)], i).getValue()
+                    }
+                }
+            }
+            return null;
+        }
+
+        void removeEntry(V value) {
+            for(int i = 0; i < table.size(); i++) {
+                if (table.indexOf(bucketEntries[SHA1(value)], i) != -1) {
+                    if (table.get(bucketEntries[SHA1(value)], i).getValue() == value) {
+                        table.remove(bucketEntries[SHA1(value)], i);
+                    }
+                }
+            }
+        }
+
+        private int SHA1(V value) {
+            MessageDigest md = MessageDigest.getInstance("SHA1")
+            byte[] messageDigest = md.digest(value.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        @Override
+        int getCapacity() {
+            return buckets.getCapacity()
+        }
+
+        @Override
+        double getLoadFactor() {
+            return buckets.getLoadFactor()
+        }
+
+        @Override
+        void setCapacity(int capacity) {
+            buckets.setCapacity(capacity)
+        }
+
+        @Override
+        void setLoadFactor(double loadFactor) {
+            buckets.setLoadFactor(loadFactor)
+        }
+
+        @Override
+        final int HashBucketLoad() {
+            return buckets.HashBucketLoad();
+        }
+    }
 
     static class HashingMap<K, V> extends MapNode<K, V> implements IHashBucketNode  {
 
@@ -90,17 +283,113 @@ class HashBucketEntrySCNode {
             }
         }
 
-        @Override
-        int getCapacity() {
-            return buckets.getCapacity()
-        }
-
         private int SHA1(K key) {
             MessageDigest md = MessageDigest.getInstance("SHA1")
             byte[] messageDigest = md.digest(key.toString().getBytes())
             BigInteger no = new BigInteger(1, messageDigest)
             int hash = no % buckets.getCapacity()
             return hash;
+        }
+
+        @Override
+        int getCapacity() {
+            return buckets.getCapacity()
+        }
+
+        @Override
+        double getLoadFactor() {
+            return buckets.getLoadFactor()
+        }
+
+        @Override
+        void setCapacity(int capacity) {
+            buckets.setCapacity(capacity)
+        }
+
+        @Override
+        void setLoadFactor(double loadFactor) {
+            buckets.setLoadFactor(loadFactor)
+        }
+
+        @Override
+        final int HashBucketLoad() {
+            return buckets.HashBucketLoad();
+        }
+    }
+
+    static class HashingTable<R, C, V> extends TableNode<R, C, V> implements IHashBucketNode  {
+
+        CircularDoublyLinkedTable<Integer, Integer, HashingTable<R, C, V>> table = new CircularDoublyLinkedTable<>();
+
+        HashingTable(R row, C column, V value, int capacity, double loadFactor) {
+            super(row, column, value);
+            buckets = new HashBucketNode(capacity, loadFactor)
+            bucketEntries = new int[capacity];
+        }
+
+        HashingMap(R row, C column, V value) {
+            super(row, column, value)
+            buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
+            bucketEntries = new int[defaultCapacity]
+        }
+
+        HashingMap() {
+            super(null, null, null);
+            buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
+            bucketEntries = new int[defaultCapacity]
+        }
+
+        HashingTable<R, C, V> putEntry(R row, C column, V value) {
+            HashingTable<R, C, V> node = new HashingTable(row, column, value);
+            if(table == null || table.isEmpty()) {
+                table.put(bucketEntries[SHA1(row, column)], 0, node);
+            }
+            if(table.containsRow(bucketEntries[SHA1(row, column)]) && table != null) {
+                for(int i = 0; i < table.size(); i++) {
+                    if(table.indexOf(bucketEntries[SHA1(row, column)], i) == -1) {
+                        table.put(bucketEntries[SHA1(row, column)], i, node);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            table.put(bucketEntries[SHA1(row, column)], 0, node);
+            return node;
+        }
+
+        V getEntry(R row, C column) {
+            for(int i = 0; i < table.size(); i++) {
+                if(table.indexOf(bucketEntries[SHA1(row, column)], i) != -1) {
+                    if(table.get(bucketEntries[SHA1(row, column)], i).getRow() == row && table.get(bucketEntries[SHA1(row, column)], i).getColumn() == column) {
+                        return table.get(bucketEntries[SHA1(row, column)], i).getValue()
+                    }
+                }
+            }
+            return null;
+        }
+
+        void removeEntry(R row, C column) {
+            for(int i = 0; i < table.size(); i++) {
+                if (table.indexOf(bucketEntries[SHA1(row, column)], i) != -1) {
+                    if (table.get(bucketEntries[SHA1(row, column)], i).getRow() == row && table.get(bucketEntries[SHA1(row, column)], i).getColumn() == column) {
+                        table.remove(bucketEntries[SHA1(row, column)], i);
+                    }
+                }
+            }
+        }
+
+        private int SHA1(R row, C column) {
+            MessageDigest md = MessageDigest.getInstance("SHA1")
+            byte[] messageDigest1 = md.digest(row.toString().getBytes())
+            byte[] messageDigest2 = md.digest(column.toString().getBytes())
+            BigInteger no = new BigInteger(1, messageDigest1 + messageDigest2)
+            int hash = no % buckets.getCapacity()
+            return hash;
+        }
+
+        @Override
+        int getCapacity() {
+            return buckets.getCapacity()
         }
 
         @Override

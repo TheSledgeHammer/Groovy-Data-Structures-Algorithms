@@ -1,26 +1,34 @@
 # Groovy-Data-Structures-Algorithms
-The following Contains various helpful data structure classes. Based from my Java Data Structures & Algorithms Project.
-Currently doesn't contain all the data structure.
+The following Contains various helpful data structure classes. It is a re-write in groovy of my Java Data Structures & Algorithms Project.
+
+Currently doesn't contain all the data structures.
 
 ### Includes:
 
 #### Lists:
-* SinglyLinkedList
 * DoublyLinkedList
+
 * CircularDoublyLinkedList
 
 #### Maps:
-* CircularDoublyLinkedMap: A Map implementation of a CircularDoublyLinkedList. Near exactly same as CircularDoublyLinkedList but with a key-value pair.
+* CircularDoublyLinkedMap: A Map implementation of a CircularDoublyLinkedList with a key-value pair.
 
-#### Tables: Structure is based of Google Guava's Tables
-* CircularDoublyLinkedTable: A Table implementation of a CircularDoublyLinkedList. Similar to CircularDoublyLinkedList but with a row-column-value triplet.
+#### Tables:
+* CircularDoublyLinkedTable: A Table implementation of a CircularDoublyLinkedList with a row-column-value triplet.
 
-#### Hashing (Work In Progress):
-* Contains a New API for creating data structures using hash algorithms.
-* Currently contains methods for Seperate Chaining & Open Addressing using Cuckoo
+#### Trees:
+* BinaryTree: A tree with 2 branches, left and right. Backed my a CircularDoublyLinkedList
+
+* BinaryIndexedTree (Fenwick Tree): A binary tree where each branch value is mapped to an integer or index within that tree. Backed my a CircularDoublyLinkedMap
+
+* TernaryTree: A tree with 3 branches, left, middle and right. Backed my a CircularDoublyLinkedList
+
+* TernaryIndexedTree (Fenwick Tree): A ternary tree where each branch value is mapped to an integer or index within that tree. Backed my a CircularDoublyLinkedMap
+
+#### Hashing:
 * CuckooHashTable: A HashTable using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
 
-## Apache Licence 2.0
+### Apache Licence 2.0
 Copyright [2018] [Martin Kelly]
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
