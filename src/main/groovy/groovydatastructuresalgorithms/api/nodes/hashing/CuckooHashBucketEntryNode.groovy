@@ -31,7 +31,7 @@ import java.security.MessageDigest
 
 //HashBucketEntryNodeCH: Refers to Hashing using Cuckoo Collision
 //WORK IN PROGRESS: HashingMap mostly Complete. Uses Cuckoo Hashing
-class HashBucketEntryCHNode {
+class CuckooHashBucketEntryNode {
 
     private static HashBucketNode buckets
     private static int[] bucketEntries

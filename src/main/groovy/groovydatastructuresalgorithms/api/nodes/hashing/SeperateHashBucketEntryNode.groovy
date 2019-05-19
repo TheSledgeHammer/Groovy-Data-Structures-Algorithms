@@ -25,7 +25,7 @@ import groovydatastructuresalgorithms.api.nodes.TreeNode
 
 import java.security.MessageDigest
 // HashBucketEntryNodeSC: Refers to Hashing using Seperate Chaining
-class HashBucketEntrySCNode {
+class SeperateHashBucketEntryNode {
 
     private static HashBucketNode buckets
     private static int[] bucketEntries
@@ -327,13 +327,13 @@ class HashBucketEntrySCNode {
             bucketEntries = new int[capacity];
         }
 
-        HashingMap(R row, C column, V value) {
+        HashingTable(R row, C column, V value) {
             super(row, column, value)
             buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
             bucketEntries = new int[defaultCapacity]
         }
 
-        HashingMap() {
+        HashingTable() {
             super(null, null, null);
             buckets = new HashBucketNode(defaultCapacity, defaultLoadFactor)
             bucketEntries = new int[defaultCapacity]

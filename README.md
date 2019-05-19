@@ -17,16 +17,16 @@ Currently doesn't contain all the data structures.
 * CircularDoublyLinkedTable: A Table implementation of a CircularDoublyLinkedList with a row-column-value triplet.
 
 #### Trees:
-* BinaryTree: A tree with 2 branches, left and right. Backed my a CircularDoublyLinkedList
+* BinaryTree: A tree with 2 branches, left and right. Backed by a CircularDoublyLinkedList
 
-* BinaryIndexedTree (Fenwick Tree): A binary tree where each branch value is mapped to an integer or index within that tree. Backed my a CircularDoublyLinkedMap
+* BinaryIndexedTree (Fenwick Tree): A binary tree where each branch value is mapped to an integer or index within that tree. Backed by a CircularDoublyLinkedMap
 
-* TernaryTree: A tree with 3 branches, left, middle and right. Backed my a CircularDoublyLinkedList
+* TernaryTree: A tree with 3 branches, left, middle and right. Backed by a CircularDoublyLinkedList
 
-* TernaryIndexedTree (Fenwick Tree): A ternary tree where each branch value is mapped to an integer or index within that tree. Backed my a CircularDoublyLinkedMap
+* TernaryIndexedTree (Fenwick Tree): A ternary tree where each branch value is mapped to an integer or index within that tree. Backed by a CircularDoublyLinkedMap
 
 #### Hashing:
-* CuckooHashTable: A HashTable using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
+* CuckooHashMap: A HashMap using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
 
 ### Apache Licence 2.0
 Copyright [2018] [Martin Kelly]

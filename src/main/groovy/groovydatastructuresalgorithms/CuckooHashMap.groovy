@@ -16,21 +16,21 @@
 
 package groovydatastructuresalgorithms
 
-import groovydatastructuresalgorithms.api.nodes.hashing.HashBucketEntryCHNode
+import groovydatastructuresalgorithms.api.nodes.hashing.CuckooHashBucketEntryNode
 
 //Follows a doublylinkedlist, but each node is hashed/ rehashed from a HashBucketEntryNode
 //Collisions are resolved using a variation on Cuckoo Hashing
-class CuckooHashTable<K, V> {
+class CuckooHashMap<K, V> {
 
-    private HashBucketEntryCHNode.HashingMap<K, V> head
-    private HashBucketEntryCHNode.HashingMap<K, V> tail
+    private CuckooHashBucketEntryNode.HashingMap<K, V> head
+    private CuckooHashBucketEntryNode.HashingMap<K, V> tail
     private int size
 
-    CuckooHashTable(K key, V value) {
-        head = new HashBucketEntryCHNode.HashingMap<K, V>(key, value)
+    CuckooHashMap(K key, V value) {
+        head = new CuckooHashBucketEntryNode.HashingMap<K, V>(key, value)
     }
 
-    CuckooHashTable() {
+    CuckooHashMap() {
         head = null
     }
 
@@ -45,8 +45,8 @@ class CuckooHashTable<K, V> {
         return size
     }
 
-    HashBucketEntryCHNode.HashingMap<K, V> put(K key, V value) {
-        HashBucketEntryCHNode.HashingMap<K, V> node = new HashBucketEntryCHNode.HashingMap<K, V>(key, value)
+    CuckooHashBucketEntryNode.HashingMap<K, V> put(K key, V value) {
+        CuckooHashBucketEntryNode.HashingMap<K, V> node = new CuckooHashBucketEntryNode.HashingMap<K, V>(key, value)
         if (size == 0 || head == null) {
             head = node
             tail = head
@@ -95,8 +95,8 @@ class CuckooHashTable<K, V> {
         return -1;
     }
 
-    private HashBucketEntryCHNode.HashingMap<K, V> getNode(int i) {
-        HashBucketEntryCHNode.HashingMap<K, V> p = null
+    private CuckooHashBucketEntryNode.HashingMap<K, V> getNode(int i) {
+        CuckooHashBucketEntryNode.HashingMap<K, V> p = null
         if (i < size / 2) {
             p = head.Next()
             for (int j = 0; j < i; j++) {
@@ -115,7 +115,7 @@ class CuckooHashTable<K, V> {
         return head.HashBucketLoad()
     }
 
-    private void Resize(HashBucketEntryCHNode.HashingMap<K, V> node) {
+    private void Resize(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() * 2);
     }
 }

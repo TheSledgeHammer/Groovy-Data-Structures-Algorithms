@@ -153,7 +153,7 @@ class FileSearch {
     }
 
     /**
-     * @param directory : the directory to search pertaining to your Mod Path
+     * @param directory : the directory to search
      * @param fileName : The file or set of files to be located
      */
     void SearchFile(File directory, String fileName) {
@@ -175,7 +175,7 @@ class FileSearch {
     }
 
     /**
-     * @param directory : the directory to search pertaining to your Mod Path
+     * @param directory : the directory to search
      * @param fileName : The file or set of files to be located
      */
     void SearchFiles(String directory, String fileName) {

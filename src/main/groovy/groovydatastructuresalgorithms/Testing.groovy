@@ -4,7 +4,7 @@ class Testing {
 
     static void main(String[] args) throws InterruptedException {
 
-        CuckooHashTable<Integer, Integer> GHT = new CuckooHashTable<>()
+        CuckooHashMap<Integer, Integer> GHT = new CuckooHashMap<>()
         GHT.put(3, 22);
         GHT.put(4, 23);
         //GHT.remove(4)
