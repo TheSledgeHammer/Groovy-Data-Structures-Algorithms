@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.Nodes.Hash
+package groovydatastructuresalgorithms.api.nodes.hashing
 
 import groovydatastructuresalgorithms.CircularDoublyLinkedTable
-import groovydatastructuresalgorithms.NodeInterfaces.IHashBucketNode
-import groovydatastructuresalgorithms.Nodes.MapNode
+import groovydatastructuresalgorithms.api.interfaces.IHashBucketNode
+import groovydatastructuresalgorithms.api.nodes.MapNode
 
 import java.security.MessageDigest
 // HashBucketEntryNodeSC: Refers to Hashing using Seperate Chaining

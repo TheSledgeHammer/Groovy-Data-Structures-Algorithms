@@ -16,7 +16,7 @@
 
 package groovydatastructuresalgorithms
 
-import groovydatastructuresalgorithms.Nodes.Hash.HashBucketEntryCHNode
+import groovydatastructuresalgorithms.api.nodes.hashing.HashBucketEntryCHNode
 
 //Follows a doublylinkedlist, but each node is hashed/ rehashed from a HashBucketEntryNode
 //Collisions are resolved using a variation on Cuckoo Hashing
@@ -48,13 +48,9 @@ class CuckooHashTable<K, V> {
     HashBucketEntryCHNode.HashingMap<K, V> put(K key, V value) {
         HashBucketEntryCHNode.HashingMap<K, V> node = new HashBucketEntryCHNode.HashingMap<K, V>(key, value)
         if (size == 0 || head == null) {
-            node.setNext(node)
-            node.setPrev(node)
             head = node
             tail = head
         } else {
-            node.setPrev(tail)
-            tail.setNext(node)
             head.setPrev(node)
             node.setNext(head)
             head = node

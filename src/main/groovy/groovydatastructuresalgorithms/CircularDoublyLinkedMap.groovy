@@ -16,7 +16,7 @@
 
 package groovydatastructuresalgorithms
 
-import groovydatastructuresalgorithms.Nodes.MapNode
+import groovydatastructuresalgorithms.api.nodes.MapNode
 
 class CircularDoublyLinkedMap<K, V> {
 

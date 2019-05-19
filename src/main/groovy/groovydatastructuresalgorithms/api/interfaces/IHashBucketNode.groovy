@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.NodeInterfaces
+package groovydatastructuresalgorithms.api.interfaces
 
-interface INodeValue<V> {
+interface IHashBucketNode {
 
-    void setValue(V value);
+    //void Resize();
 
-    V getValue();
+    int getCapacity();
 
+    double getLoadFactor();
+
+    void setCapacity(int capacity);
+
+    void setLoadFactor(double loadFactor);
+
+    int HashBucketLoad();
 }

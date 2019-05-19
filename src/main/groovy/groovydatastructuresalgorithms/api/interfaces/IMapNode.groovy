@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.NodeInterfaces
+package groovydatastructuresalgorithms.api.interfaces
 
-interface INodeColumn<C> {
-
-    void setColumn(C column);
-
-    C getColumn();
+interface IMapNode<K, V> extends INodeKey<K>, INodeValue<V> {
 
 }

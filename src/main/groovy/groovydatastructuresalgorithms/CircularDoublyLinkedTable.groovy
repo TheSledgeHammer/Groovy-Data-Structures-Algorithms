@@ -16,7 +16,7 @@
 
 package groovydatastructuresalgorithms
 
-import groovydatastructuresalgorithms.Nodes.TableNode
+import groovydatastructuresalgorithms.api.nodes.TableNode
 
 class CircularDoublyLinkedTable<R, C, V> {
 

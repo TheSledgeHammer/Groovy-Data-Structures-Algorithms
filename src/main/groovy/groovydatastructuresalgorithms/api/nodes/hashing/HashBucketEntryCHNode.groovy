@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.Nodes.Hash
+package groovydatastructuresalgorithms.api.nodes.hashing
 
 import com.google.common.hash.HashCode
 import com.google.common.hash.HashFunction
 import com.google.common.hash.Hashing
 import fnv.FNV
 import groovydatastructuresalgorithms.CircularDoublyLinkedMap
-import groovydatastructuresalgorithms.Nodes.ListNode
-import groovydatastructuresalgorithms.Nodes.MapNode
-import groovydatastructuresalgorithms.Nodes.TableNode
-import groovydatastructuresalgorithms.Nodes.TreeNode
+import groovydatastructuresalgorithms.api.nodes.ListNode
+import groovydatastructuresalgorithms.api.nodes.MapNode
+import groovydatastructuresalgorithms.api.nodes.TableNode
+import groovydatastructuresalgorithms.api.nodes.TreeNode
 
 import java.security.MessageDigest
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.NodeInterfaces
+package groovydatastructuresalgorithms.api.interfaces
 
 interface INodeRow<R> {
     void setRow(R row);

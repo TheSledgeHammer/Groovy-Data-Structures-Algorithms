@@ -14,48 +14,61 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.Nodes
+package groovydatastructuresalgorithms.api.nodes
 
-import groovydatastructuresalgorithms.NodeInterfaces.IMapNode
+import groovydatastructuresalgorithms.api.interfaces.ITableNode
 
-class MapNode<K, V> implements IMapNode<K, V> {
+class TableNode<R, C, V> implements ITableNode<R, C, V> {
 
-    private K key
+    private R row
+    private C column
     private V value
-    private MapNode<K, V> next
-    private MapNode<K, V> prev
 
-    MapNode(K key, V value) {
-        setKey(key)
+    private TableNode<R, C, V> next
+    private TableNode<R, C, V> prev
+
+    TableNode(R row, C column, V value) {
+        setRow(row)
+        setColumn(column)
         setValue(value)
         setNext(null)
         setPrev(null)
     }
 
-    void setNext(MapNode<K, V> next) {
+    void setNext(TableNode<R, C, V> next) {
         this.next = next
     }
 
-    void setPrev(MapNode<K, V> prev) {
+    void setPrev(TableNode<R, C, V> prev) {
         this.prev = prev
     }
 
-    MapNode<K, V> Next() {
+    TableNode<R, C, V> Next() {
         return next
     }
 
-    MapNode<K, V> Prev() {
+    TableNode<R, C, V> Prev() {
         return prev
     }
 
     @Override
-    void setKey(K key) {
-        this.key = key
+    void setColumn(C column) {
+        this.column = column
     }
 
     @Override
-    K getKey() {
-        return key
+    C getColumn() {
+        return column
+    }
+
+    @Override
+    void setRow(R row) {
+        this.row = row
+    }
+
+    @Override
+    R getRow() {
+        return row
     }
 
     @Override

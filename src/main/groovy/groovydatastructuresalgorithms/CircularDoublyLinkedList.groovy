@@ -16,7 +16,7 @@
 
 package groovydatastructuresalgorithms
 
-import groovydatastructuresalgorithms.Nodes.ListNode
+import groovydatastructuresalgorithms.api.nodes.ListNode
 
 class CircularDoublyLinkedList<V> {
 

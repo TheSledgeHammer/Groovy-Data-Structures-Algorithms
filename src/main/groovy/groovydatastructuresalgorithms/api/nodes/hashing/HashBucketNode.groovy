@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.Nodes.Hash
+package groovydatastructuresalgorithms.api.nodes.hashing
 
-import groovydatastructuresalgorithms.NodeInterfaces.IHashBucketNode
+import groovydatastructuresalgorithms.api.interfaces.IHashBucketNode
 
 //A Basic Bucket used for creating the bucket parameters in Hash Structures
 class HashBucketNode implements IHashBucketNode {

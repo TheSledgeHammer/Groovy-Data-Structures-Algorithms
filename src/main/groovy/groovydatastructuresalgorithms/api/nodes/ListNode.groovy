@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.Nodes
+package groovydatastructuresalgorithms.api.nodes
 
-import groovydatastructuresalgorithms.NodeInterfaces.INodeValue
+import groovydatastructuresalgorithms.api.interfaces.INodeValue
 
 class ListNode<V> implements INodeValue<V> {
 

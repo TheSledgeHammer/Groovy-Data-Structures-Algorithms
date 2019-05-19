@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package groovydatastructuresalgorithms.NodeInterfaces
+package groovydatastructuresalgorithms.api.interfaces
 
 interface ITableNode<R, C, V> extends INodeRow<R>, INodeColumn<C>, INodeValue<V> {
 
