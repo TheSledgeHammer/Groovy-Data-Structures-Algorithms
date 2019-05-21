@@ -1,13 +1,27 @@
+/*
+ * Copyright [2018] [Martin Kelly]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package groovydatastructuresalgorithms
 
 class CompleteBinaryTree<V> {
 
-    private BinaryTree<V> root;
+    BinaryTree<V> root;
     private int size = 0;
     private int leftCounter = 0;
     private int rightCounter = 0;
-    private int depthCount = 0;
-    private boolean depth = false;
 
     CompleteBinaryTree() {
         root = null;
@@ -28,36 +42,37 @@ class CompleteBinaryTree<V> {
         return size;
     }
 
-    void add(V value) {
+   void add(V value) {
         BinaryTree<V> node = new BinaryTree<>(value);
-        if(size == 0 || root == null) {
+        if (size == 0 || root == null) {
             node.addLeft(value);
+            root = node;
         }
-        if(size > 0 || root != null) {
-            if(leftCounter > rightCounter) {
+        if (size > 0 || root != null) {
+            if (leftCounter > rightCounter) {
                 node.addRight(value);
                 rightCounter++;
             } else {
-                depth = true;
                 node.addLeft(value);
                 leftCounter++;
             }
         }
         root = node;
         size++;
-        //Depth Calculation: To ensure the tree depth is only increased when each branch has 2 child nodes both left & right
-        if(size() < 2) {
-            depthCount++
-        } else {
-            if (leftCounter == rightCounter && depth) {
-                println "depth should be + 1"
-                if (leftCounter % 2 == 0 && rightCounter % 2 == 0) {
-                    println "left is divisible by 2"
-                    println "right is divisible by 2"
-                    depthCount++;
-                }
-                depth = false;
-            }
+    }
+
+    V get(V value) {
+        return root.get(value);
+    }
+
+    void delete(V value) {
+        if(contains(value) && get(value).equals(value)) {
+            println value;
+            root.delete(value);
         }
+    }
+
+    boolean contains(V value) {
+        return root.contains(value);
     }
 }

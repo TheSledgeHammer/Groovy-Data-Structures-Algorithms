@@ -203,6 +203,13 @@ class CircularDoublyLinkedList<V> {
         }
     }
 
+    boolean contains(V value) {
+        if (value == null) {
+            throw new IllegalArgumentException("argument to contains() is null")
+        }
+        return get(value) != null
+    }
+
     Iterator<V> iterator() {
         Set<V> cdll = new HashSet<>()
         for (int i = 0; i < size; i++) {
