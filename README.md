@@ -25,6 +25,8 @@ Currently doesn't contain all the data structures.
 
 * TernaryIndexedTree (Fenwick Tree): A ternary tree where each branch value is mapped to an integer or index within that tree. Backed by a CircularDoublyLinkedMap
 
+* CompleteBinaryTree: A binary tree in which every level, except possibly the last, is completely filled, and all nodes are as far left as possible.
+
 #### Hashing:
 * CuckooHashMap: A HashMap using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
 

@@ -18,8 +18,7 @@ package groovydatastructuresalgorithms
 
 import groovydatastructuresalgorithms.api.nodes.hashing.CuckooHashBucketEntryNode
 
-//Follows a doublylinkedlist, but each node is hashed/ rehashed from a HashBucketEntryNode
-//Collisions are resolved using a variation on Cuckoo Hashing
+//Follows a DoublyLinkedList for addition and deletion of values, but each node is hashed/rehashed by CuckooHashBucketEntryNode
 class CuckooHashMap<K, V> {
 
     private CuckooHashBucketEntryNode.HashingMap<K, V> head
@@ -48,6 +47,8 @@ class CuckooHashMap<K, V> {
     CuckooHashBucketEntryNode.HashingMap<K, V> put(K key, V value) {
         CuckooHashBucketEntryNode.HashingMap<K, V> node = new CuckooHashBucketEntryNode.HashingMap<K, V>(key, value)
         if (size == 0 || head == null) {
+            node.setNext(node)
+            node.setPrev(node);
             head = node
             tail = head
         } else {
@@ -57,8 +58,11 @@ class CuckooHashMap<K, V> {
         }
         size++
         if (size >= Load()) {
-            Resize(node)
+            Expand(node)
         }
+        /*if (size <= (Load() / 3)) {
+            Shrink(node)
+        }*/
         return node.putEntry(key, value)
     }
 
@@ -115,7 +119,27 @@ class CuckooHashMap<K, V> {
         return head.HashBucketLoad()
     }
 
-    private void Resize(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
+    private void Expand(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() * 2);
+    }
+
+    private void Shrink(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
+        node.setCapacity(node.getCapacity() / 3);
+    }
+
+    List<K> getKeys() {
+        List<K> keys = new LinkedList<>();
+        for(int i = 0; i < size; i++) {
+            keys.add(getNode(i).getKey());
+        }
+        return keys;
+    }
+
+    List<V> getValues() {
+        List<V> values = new LinkedList<>();
+        for(int i = 0; i < size; i++) {
+            values.add(getNode(i).getValue());
+        }
+        return values;
     }
 }

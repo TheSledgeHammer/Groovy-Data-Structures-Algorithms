@@ -54,6 +54,8 @@ class DoublyLinkedList<V> {
     ListNode<V> addToHead(V value) {
         ListNode<V> node = new ListNode<V>(value)
         if (size == 0 || head == null) {
+            node.setNext(node)
+            node.setPrev(node)
             head = node
             tail = head
         } else {
@@ -68,6 +70,8 @@ class DoublyLinkedList<V> {
     ListNode<V> addToTail(V value) {
         ListNode<V> node = new ListNode<V>(value)
         if (size == 0 || head == null) {
+            node.setNext(node)
+            node.setPrev(node)
             head = node
             tail = head
         } else {
