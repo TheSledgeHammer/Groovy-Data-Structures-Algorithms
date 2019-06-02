@@ -232,4 +232,39 @@ class CircularDoublyLinkedMap<K, V> {
         }
         return false;
     }
+
+    Map.Entry<K, V> mapEntry() {
+        for(int i = 0; i < size(); i++) {
+            if(getNode(i) != null) {
+                return new MapEntry(getNode(i).getKey(), getNode(i).getValue())
+            };
+        }
+        return null;
+    }
+
+    Set<K> keySet() {
+        Set<K> key = new LinkedHashSet<>();
+        for (int i = 0; i < size(); i++) {
+            key.add(getNode(i).getKey())
+        }
+        return key;
+    }
+
+    Set<V> valueSet() {
+        Set<V> value = new LinkedHashSet<>();
+        for (int i = 0; i < size(); i++) {
+            value.add(getNode(i).getValue())
+        }
+        return value;
+    }
+
+    Set<Map.Entry<K,V>> entrySet() {
+        Set<Map.Entry<K,V>> es = new LinkedHashSet<>();
+        for(int i = 0; i < size(); i++) {
+            if(getNode(i) != null) {
+                es.add(new MapEntry(getNode(i).getKey(), getNode(i).getValue()));
+            }
+        }
+        return es;
+    }
 }

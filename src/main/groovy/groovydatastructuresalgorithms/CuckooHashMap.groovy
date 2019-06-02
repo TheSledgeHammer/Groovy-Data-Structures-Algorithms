@@ -56,6 +56,7 @@ class CuckooHashMap<K, V> {
             node.setNext(head)
             head = node
         }
+
         size++
         if (size >= Load()) {
             Expand(node)
@@ -90,8 +91,9 @@ class CuckooHashMap<K, V> {
         head.removeEntry(key)
     }
 
+    //TODO: Fix null pointer exception due to: an expected key-value location is stored in another stored key-value location
     int indexOfKey(K key) {
-        for(int i = 0; i <= size; i++) {
+        for(int i = 0; i < size; i++) {
             if (getNode(i).getKey().equals(key)) {
                 return i;
             }
@@ -115,6 +117,42 @@ class CuckooHashMap<K, V> {
         return p
     }
 
+    Map.Entry<K, V> mapEntry() {
+        for(int i = 0; i < size(); i++) {
+            println indexOfKey(getNode(i).getKey())
+            if(getNode(i) != null) {
+                return new MapEntry(getNode(i).getKey(), getNode(i).getValue())
+            };
+        }
+        return null;
+    }
+
+    Set<K> keySet() {
+        Set<K> key = new LinkedHashSet<>();
+        for (int i = 0; i < size(); i++) {
+            key.add(getNode(i).getKey())
+        }
+        return key;
+    }
+
+    Set<V> valueSet() {
+        Set<V> value = new LinkedHashSet<>();
+        for (int i = 0; i < size(); i++) {
+            value.add(getNode(i).getValue())
+        }
+        return value;
+    }
+
+    Set<Map.Entry<K,V>> entrySet() {
+        Set<Map.Entry<K,V>> es = new LinkedHashSet<>();
+        for(int i = 0; i < head.getCapacity(); i++) {
+            if(getNode(i) != null) {
+                es.add(new MapEntry(getNode(i).getKey(), getNode(i).getValue()));
+            }
+        }
+        return es;
+    }
+
     private int Load() {
         return head.HashBucketLoad()
     }
@@ -125,21 +163,5 @@ class CuckooHashMap<K, V> {
 
     private void Shrink(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() / 3);
-    }
-
-    List<K> getKeys() {
-        List<K> keys = new LinkedList<>();
-        for(int i = 0; i < size; i++) {
-            keys.add(getNode(i).getKey());
-        }
-        return keys;
-    }
-
-    List<V> getValues() {
-        List<V> values = new LinkedList<>();
-        for(int i = 0; i < size; i++) {
-            values.add(getNode(i).getValue());
-        }
-        return values;
     }
 }
