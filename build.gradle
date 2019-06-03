@@ -5,6 +5,7 @@ buildscript {
 }
 
 apply plugin: 'groovy'
+apply plugin: 'java'
 apply plugin: 'maven'
 
 version = '1.0.0'
@@ -13,10 +14,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	/*maven {
+	maven {
 		name = "Apache Groovy"
 		url = "https://mvnrepository.com/artifact/org.codehaus.groovy/groovy"
-	}*/
+	}
   	maven {
 		name = "Google Guava"
 		url = "https://mvnrepository.com/artifact/com.google.guava/guava"
