@@ -21,10 +21,10 @@ group= "com.thesledgehammer.Groovy-data-structure-algorithms"
 archivesBaseName = "Groovy-Data-Structure-Algorithms"
 
 repositories {
-	maven {
+	/*maven {
 		name = "Apache Groovy"
-		url = "https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all"
-	}
+		url = "https://mvnrepository.com/artifact/org.codehaus.groovy/groovy"
+	}*/
   	maven {
 		name = "Google Guava"
 		url = "https://mvnrepository.com/artifact/com.google.guava/guava"
@@ -32,6 +32,6 @@ repositories {
 }
 
 dependencies {
-  compile "org.codehaus.groovy:groovy-all:${groovy_version}"
+  compile "org.codehaus.groovy:groovy:2.5.7"
   compile group: 'com.google.guava', name: 'guava', version: '27.1-jre'
 }
