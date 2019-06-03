@@ -1,24 +1,16 @@
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
-        maven {
-            name = "bintray"
-            url = "https://dl.bintray.com/thesledgehammer/development/"
-        }
     }
 }
 
-plugins {
-  id 'groovy'
-  id 'maven'
-  id "com.jfrog.bintray" version "1.8.4"
-}
-//apply from: rootProject.file('git-maven.gradle')
-//apply from: rootProject.file('mavenBintray.gradle')
+apply plugin: 'groovy'
+apply plugin: 'maven'
 
-group= "com.thesledgehammer.Groovy-data-structure-algorithms"
-archivesBaseName = "Groovy-Data-Structure-Algorithms"
+version = '1.0.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	/*maven {
