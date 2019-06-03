@@ -25,6 +25,6 @@ repositories {
 }
 
 dependencies {
-  compile "${groovy}"
+  compile "org.codehaus.groovy:groovy-all:{${groovy_version}"
   compile group: 'com.google.guava', name: 'guava', version: '27.1-jre'
 }
