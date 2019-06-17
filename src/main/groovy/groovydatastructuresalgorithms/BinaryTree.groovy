@@ -88,6 +88,11 @@ class BinaryTree<V> {
         return null;
     }
 
+    V getByIndex(int index) {
+        TreeNode<V> node = root.getNode(index).getValue();
+        return node.getValue();
+    }
+
     void delete(V value) {
         TreeNode<V> node = null;// new TreeNode<>(value);
         for(int i = 0; i < size; i++) {
@@ -104,5 +109,16 @@ class BinaryTree<V> {
             throw new IllegalArgumentException("argument to contains() is null")
         }
         return get(value) != null;
+    }
+
+    int indexOf(V value) {
+        TreeNode<V> node = null;
+        for(int i = 0; i < size; i++) {
+            node = root.getNode(i).getValue();
+            if (node.getValue().equals(value)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

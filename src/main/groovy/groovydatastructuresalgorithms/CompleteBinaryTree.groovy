@@ -18,10 +18,13 @@ package groovydatastructuresalgorithms
 
 class CompleteBinaryTree<V> {
 
-    BinaryTree<V> root;
+    private BinaryTree<V> root;
     private int size = 0;
     private int leftCounter = 0;
     private int rightCounter = 0;
+    //Counter Lists, for keeping tree in sync upon deletion of objects or values stored
+    private CircularDoublyLinkedList<BinaryTree<V>> left = new CircularDoublyLinkedList<>();
+    private CircularDoublyLinkedList<BinaryTree<V>> right = new CircularDoublyLinkedList<>();
 
     CompleteBinaryTree() {
         root = null;
@@ -43,36 +46,78 @@ class CompleteBinaryTree<V> {
     }
 
    void add(V value) {
-        BinaryTree<V> node = new BinaryTree<>(value);
-        if (size == 0 || root == null) {
-            node.addLeft(value);
-            root = node;
-        }
-        if (size > 0 || root != null) {
-            if (leftCounter > rightCounter) {
-                node.addRight(value);
-                rightCounter++;
-            } else {
-                node.addLeft(value);
-                leftCounter++;
-            }
-        }
-        root = node;
-        size++;
-    }
+       BinaryTree<V> node = new BinaryTree<>(value);
+       if (size == 0 || root == null) {
+           node.addLeft(value);
+           root = node;
+       }
+       if (size > 0 || root != null) {
+           if (leftCounter > rightCounter) {
+               node.addRight(value);
+               rightCounter++;
+               right.add(node);
+           } else {
+               node.addLeft(value);
+               leftCounter++;
+               left.add(node);
+           }
+       }
+       root = node;
+       size++;
+   }
 
     V get(V value) {
+        for(int i = 0; i < size; i++) {
+            if(root.get(value) == null) {
+                return null;
+            }
+        }
         return root.get(value);
     }
 
+    V getByIndex(int index) {
+        return root.getByIndex(index)
+    }
+
     void delete(V value) {
-        if(contains(value) && get(value).equals(value)) {
-            println value;
-            root.delete(value);
+        if(SyncLeft(value)) {
+            left.remove(root);
+            leftCounter--;
         }
+        if(SyncRight(value)) {
+            right.remove(root);
+            rightCounter--;
+        }
+        root.delete(value);
     }
 
     boolean contains(V value) {
         return root.contains(value);
+    }
+
+    int indexOf(V value) {
+        return root.indexOf(value);
+    }
+
+    private boolean SyncLeft(V value) {
+        BinaryTree<V> node = null;
+        for(int i = 0; i < left.size(); i++) {
+            node = left.getNode(i).getValue();
+            if(node.contains(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean SyncRight(V value) {
+        BinaryTree<V> node = null;
+        for(int i = 0; i < right.size(); i++) {
+            node = right.getNode(i).getValue();
+            if(node.contains(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,8 +1,6 @@
 # Groovy-Data-Structures-Algorithms
 The following Contains various helpful data structure classes. It is a re-write in groovy of my Java Data Structures & Algorithms Project.
 
-Currently doesn't contain all the data structures.
-
 ### Includes:
 
 #### Lists:
