@@ -100,7 +100,7 @@ class CircularDoublyLinkedTable<R, C, V> {
         return node
     }
 
-    protected TableNode<R, C, V> getNode(int i) {
+    private TableNode<R, C, V> getNode(int i) {
         TableNode<R, C, V> p = null
         if (i < size / 2) {
             p = head.Next()

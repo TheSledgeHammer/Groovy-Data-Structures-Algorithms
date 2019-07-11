@@ -52,6 +52,8 @@ class CuckooHashMap<K, V> {
             head = node
             tail = head
         } else {
+            node.setPrev(tail)
+            tail.setNext(node)
             head.setPrev(node)
             node.setNext(head)
             head = node
@@ -69,6 +71,7 @@ class CuckooHashMap<K, V> {
 
     V get(K key) {
         int idx = indexOfKey(key);
+
         if(isEmpty()) {
             return null;
         }
@@ -91,7 +94,6 @@ class CuckooHashMap<K, V> {
         head.removeEntry(key)
     }
 
-    //TODO: Fix null pointer exception due to: an expected key-value location is stored in another stored key-value location
     int indexOfKey(K key) {
         for(int i = 0; i < size; i++) {
             if (getNode(i).getKey().equals(key)) {
@@ -157,11 +159,11 @@ class CuckooHashMap<K, V> {
         return head.HashBucketLoad()
     }
 
-    private void Expand(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
+    private static void Expand(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() * 2);
     }
 
-    private void Shrink(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
-        node.setCapacity(node.getCapacity() / 3);
+    private static void Shrink(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
+        node.setCapacity(node.getCapacity() / 2);
     }
 }

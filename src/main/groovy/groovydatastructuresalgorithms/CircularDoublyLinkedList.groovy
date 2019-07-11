@@ -151,7 +151,7 @@ class CircularDoublyLinkedList<V> {
         return -1;
     }
 
-    protected ListNode<V> getNode(int i) {
+    private ListNode<V> getNode(int i) {
         ListNode<V> p = null
         if (i < size / 2) {
             p = head.Next()

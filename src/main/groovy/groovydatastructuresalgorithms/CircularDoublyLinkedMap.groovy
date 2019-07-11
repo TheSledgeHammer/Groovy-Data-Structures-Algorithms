@@ -142,15 +142,14 @@ class CircularDoublyLinkedMap<K, V> {
     }
 
     int indexOf(K key, V value) {
-        int index// = 0;
         if (indexOfKey(key) == indexOfValue(value)) {
-            index = (indexOfKey(key) + indexOfValue(value)) / 2
+            float index = (indexOfKey(key) + indexOfValue(value)) / 2
             return index
         }
         return -1
     }
 
-    protected MapNode<K, V> getNode(int i) {
+    private MapNode<K, V> getNode(int i) {
         MapNode<K, V> p = null
         if (i < size / 2) {
             p = head.Next()
@@ -266,5 +265,26 @@ class CircularDoublyLinkedMap<K, V> {
             }
         }
         return es;
+    }
+
+    @Override
+    String toString() {
+        Iterator<Map.Entry<K,V>> i = entrySet().iterator();
+        if (! i.hasNext())
+            return "{}";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+        for (;;) {
+            Map.Entry<K,V> e = i.next();
+            K key = e.getKey();
+            V value = e.getValue();
+            sb.append(key   == this ? "(this Map)" : key);
+            sb.append('=');
+            sb.append(value == this ? "(this Map)" : value);
+            if (! i.hasNext())
+                return sb.append('}').toString();
+            sb.append(',').append(' ');
+        }
     }
 }

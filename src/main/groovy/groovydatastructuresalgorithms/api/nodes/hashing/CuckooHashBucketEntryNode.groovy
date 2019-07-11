@@ -440,7 +440,7 @@ class CuckooHashBucketEntryNode {
                 } else if(!table4.containsKey(bucketEntries[MURMUR3(key)])) {
                     table4.put(bucketEntries[MURMUR3(key)], prev);
                 }
-                table1.put(bucketEntries[MD5(key)], node);
+                table1.putToHead(bucketEntries[MD5(key)], node);
             }
             //SHA1
             if(table2.containsKey(bucketEntries[SHA1(key)]) && table2 != null) {
@@ -478,11 +478,11 @@ class CuckooHashBucketEntryNode {
                 }
                 table4.put(bucketEntries[MURMUR3(key)], node);
             }
-
             table1.put(bucketEntries[MD5(key)], node);
             table2.put(bucketEntries[SHA1(key)], node);
             table3.put(bucketEntries[FNV1A(key)], node);
             table4.put(bucketEntries[MURMUR3(key)], node);
+
             return node;
         }
 
@@ -688,10 +688,10 @@ class CuckooHashBucketEntryNode {
             if (table2.containsKey(bucketEntries[SHA1(row, column)])) {
                 table2.remove(bucketEntries[SHA1(row, column)])
             }
-            if(table3.containsKey(bucketEntries[FNV1A(row, column)])) {
+            if (table3.containsKey(bucketEntries[FNV1A(row, column)])) {
                 table3.remove(bucketEntries[FNV1A(row, column)]);
             }
-            if(table4.containsKey(bucketEntries[MURMUR3(row, column)])) {
+            if (table4.containsKey(bucketEntries[MURMUR3(row, column)])) {
                 table4.remove(bucketEntries[MURMUR3(row, column)]);
             }
         }
@@ -725,8 +725,9 @@ class CuckooHashBucketEntryNode {
             MessageDigest md = MessageDigest.getInstance("MD5")
             byte[] messageDigest1 = md.digest(row.toString().getBytes())
             byte[] messageDigest2 = md.digest(column.toString().getBytes())
-            BigInteger no = new BigInteger(1, messageDigest1 + messageDigest2)
-            int hash = no % buckets.getCapacity()
+            BigInteger no1 = new BigInteger(1, messageDigest1);
+            BigInteger no2 = new BigInteger(1, messageDigest2);
+            int hash = (no1 + no2) % buckets.getCapacity()
             return hash;
         }
 
@@ -734,16 +735,18 @@ class CuckooHashBucketEntryNode {
             MessageDigest md = MessageDigest.getInstance("SHA1")
             byte[] messageDigest1 = md.digest(row.toString().getBytes())
             byte[] messageDigest2 = md.digest(column.toString().getBytes())
-            BigInteger no = new BigInteger(1, messageDigest1 + messageDigest2)
-            int hash = no % buckets.getCapacity()
+            BigInteger no1 = new BigInteger(1, messageDigest1);
+            BigInteger no2 = new BigInteger(1, messageDigest2);
+            int hash = (no1 + no2) % buckets.getCapacity()
             return hash;
         }
 
         private int FNV1A(R row, C column) {
-            byte[] digest1 = FNV.fnv1a(row.toString().getBytes(), 128);
-            byte[] digest2 = FNV.fnv1a(column.toString().getBytes(), 128);
-            BigInteger no = new BigInteger(1, digest1 + digest2);
-            int hash = no % buckets.getCapacity()
+            byte[] messageDigest1 = FNV.fnv1a(row.toString().getBytes(), 128);
+            byte[] messageDigest2 = FNV.fnv1a(column.toString().getBytes(), 128);
+            BigInteger no1 = new BigInteger(1, messageDigest1);
+            BigInteger no2 = new BigInteger(1, messageDigest2);
+            int hash = (no1 + no2) % buckets.getCapacity()
             return hash;
         }
 
