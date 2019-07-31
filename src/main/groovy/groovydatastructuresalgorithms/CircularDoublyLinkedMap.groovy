@@ -149,7 +149,7 @@ class CircularDoublyLinkedMap<K, V> {
         return -1
     }
 
-    private MapNode<K, V> getNode(int i) {
+    protected MapNode<K, V> getNode(int i) {
         MapNode<K, V> p = null
         if (i < size / 2) {
             p = head.Next()

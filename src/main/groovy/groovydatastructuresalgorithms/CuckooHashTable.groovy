@@ -45,9 +45,6 @@ class CuckooHashTable<R, C, V> {
         if (size >= Load()) {
             Expand(node)
         }
-        /*if (size <= (Load() / 3)) {
-            Shrink(node)
-        }*/
         return node.putEntry(row, column, value);
     }
 
@@ -121,11 +118,25 @@ class CuckooHashTable<R, C, V> {
         return p
     }
 
+    void remove(R row, C column) {
+        if (size == 0) {
+            return
+        } else {
+            head = getNode(indexOf(row, column));
+            head.setRow(null);
+            head.setColumn(null);
+            head.setValue(null);
+            head = head.Next();
+            size--;
+        }
+        head.removeEntry(row, column);
+    }
+
     private int Load() {
         return head.HashBucketLoad()
     }
 
-    private static void Expand(CuckooHashBucketEntryNode.HashingTable<R, C, V> node) {
+    private void Expand(CuckooHashBucketEntryNode.HashingTable<R, C, V> node) {
         node.setCapacity(node.getCapacity() * 2);
     }
 }

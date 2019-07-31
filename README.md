@@ -28,8 +28,11 @@ The following Contains various helpful data structure classes. It is a re-write 
 #### Hashing:
 * CuckooHashMap: A HashMap using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
 
+* CuckooHashTable A HashTable using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
+
 #### Algorithms:
 * DammAlgorithm: Can calculate a check digit using Damm's Algorithm. Uses the QuasiGroupGenerator to perform calculations.
+
 * QuasiGroupGenerator: Can create QuasiGroups of size n with an order of magnitude n. Form a Latin Square. Is generated Randomly.
 
 ### Apache Licence 2.0

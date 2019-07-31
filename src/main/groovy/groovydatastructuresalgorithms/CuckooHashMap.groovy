@@ -63,9 +63,6 @@ class CuckooHashMap<K, V> {
         if (size >= Load()) {
             Expand(node)
         }
-        /*if (size <= (Load() / 3)) {
-            Shrink(node)
-        }*/
         return node.putEntry(key, value)
     }
 
@@ -159,11 +156,12 @@ class CuckooHashMap<K, V> {
         return head.HashBucketLoad()
     }
 
-    private static void Expand(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
+    private void Expand(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() * 2);
     }
-
+/*
     private static void Shrink(CuckooHashBucketEntryNode.HashingMap<K, V> node) {
         node.setCapacity(node.getCapacity() / 2);
     }
+    */
 }

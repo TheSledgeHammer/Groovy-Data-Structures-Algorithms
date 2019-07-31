@@ -114,4 +114,22 @@ class TernaryTree<V> {
         }
         size--;
     }
+
+    boolean contains(V value) {
+        if(value == null) {
+            throw new IllegalArgumentException("argument to contains() is null")
+        }
+        return get(value) != null;
+    }
+
+    int indexOf(V value) {
+        TreeNode<V> node = null;
+        for(int i = 0; i < size; i++) {
+            node = root.getNode(i).getValue();
+            if (node.getValue().equals(value)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
