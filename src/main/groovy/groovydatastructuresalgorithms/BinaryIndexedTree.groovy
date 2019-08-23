@@ -16,9 +16,10 @@
 
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.api.interfaces.ITree
 import groovydatastructuresalgorithms.api.nodes.TreeNode
 
-class BinaryIndexedTree<V> {
+class BinaryIndexedTree<V> implements ITree<V> {
 
     private CircularDoublyLinkedMap<Integer, TreeNode<V>> root;
     private int size = 0;

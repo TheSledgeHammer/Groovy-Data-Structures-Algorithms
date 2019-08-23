@@ -16,50 +16,63 @@
 
 package groovydatastructuresalgorithms.api.nodes
 
+import groovydatastructuresalgorithms.api.interfaces.IMap
+import groovydatastructuresalgorithms.api.interfaces.INodeKey
 import groovydatastructuresalgorithms.api.interfaces.INodeValue
-import groovydatastructuresalgorithms.api.interfaces.ITree
 
-class TreeNode<V> implements ITree<V>, INodeValue<V> {
+class TreeMapNode<K, V> implements IMap<K, V>, INodeKey<K>, INodeValue<V> {
 
+    private K key;
     private V value
-    private TreeNode<V> right
-    private TreeNode<V> left
-    private TreeNode<V> middle
+    private TreeMapNode<K, V> right
+    private TreeMapNode<K, V> left
+    private TreeMapNode<K, V> middle
 
-    TreeNode(V value) {
+    TreeMapNode(K key, V value) {
+        setKey(key)
         setValue(value)
         setLeft(null)
         setRight(null)
         setMiddle(null)
     }
 
-    void setRight(TreeNode<V> right) {
+    void setRight(TreeMapNode<K, V> right) {
         this.right = right
     }
 
-    void setLeft(TreeNode<V> left) {
+    void setLeft(TreeMapNode<K, V> left) {
         this.left = left
     }
 
-    void setMiddle(TreeNode<V> middle) {
+    void setMiddle(TreeMapNode<K, V> middle) {
         this.middle = middle
+    }
+
+    TreeMapNode<K, V> Right() {
+        return right
+    }
+
+    TreeMapNode<K, V> Left() {
+        return left
+    }
+
+    TreeMapNode<K, V> Middle() {
+        return middle
+    }
+
+    @Override
+    void setKey(K key) {
+        this.key = key;
     }
 
     @Override
     void setValue(V value) {
-        this.value = value
+        this.value = value;
     }
 
-    TreeNode<V> Right() {
-        return right
-    }
-
-    TreeNode<V> Left() {
-        return left
-    }
-
-    TreeNode<V> Middle() {
-        return middle
+    @Override
+    K getKey() {
+        return key;
     }
 
     @Override
@@ -67,4 +80,3 @@ class TreeNode<V> implements ITree<V>, INodeValue<V> {
         return value
     }
 }
-

@@ -16,7 +16,9 @@
 
 package groovydatastructuresalgorithms
 
-class CompleteBinaryTree<V> {
+import groovydatastructuresalgorithms.api.interfaces.ITree
+
+class CompleteBinaryTree<V> implements ITree<V> {
 
     private BinaryTree<V> root;
     private int size = 0;

@@ -16,9 +16,10 @@
 
 package groovydatastructuresalgorithms.api.nodes
 
+import groovydatastructuresalgorithms.api.interfaces.IMap
 import groovydatastructuresalgorithms.api.interfaces.IMapNode
 
-class MapNode<K, V> implements IMapNode<K, V> {
+class MapNode<K, V> implements IMapNode<K, V>, IMap<K, V> {
 
     private K key
     private V value

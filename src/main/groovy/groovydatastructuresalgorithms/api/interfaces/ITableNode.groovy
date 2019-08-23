@@ -16,6 +16,6 @@
 
 package groovydatastructuresalgorithms.api.interfaces
 
-interface ITableNode<R, C, V> extends INodeRow<R>, INodeColumn<C>, INodeValue<V> {
+interface ITableNode<R, C, V> extends ITable<R,C,V>, INodeRow<R>, INodeColumn<C>, INodeValue<V> {
 
 }

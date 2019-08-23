@@ -16,9 +16,10 @@
 
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.api.interfaces.ITable
 import groovydatastructuresalgorithms.api.nodes.TableNode
 
-class CircularDoublyLinkedTable<R, C, V> {
+class CircularDoublyLinkedTable<R, C, V> implements ITable<R,C,V> {
 
     private TableNode<R, C, V> head
     private TableNode<R, C, V> tail
@@ -242,5 +243,10 @@ class CircularDoublyLinkedTable<R, C, V> {
             head = head.Next();
             size--;
         }
+    }
+
+    @Override
+    String toString() {
+        return "${head.getRow()} + ${head.getColumn()}  = ${head.getValue()}";
     }
 }

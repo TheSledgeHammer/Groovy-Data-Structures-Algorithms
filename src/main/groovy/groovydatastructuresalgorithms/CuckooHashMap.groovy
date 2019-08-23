@@ -16,10 +16,11 @@
 
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.api.interfaces.IMap
 import groovydatastructuresalgorithms.api.nodes.hashing.CuckooHashBucketEntryNode
 
 //Follows a DoublyLinkedList for addition and deletion of values, but each node is hashed/rehashed by CuckooHashBucketEntryNode
-class CuckooHashMap<K, V> {
+class CuckooHashMap<K, V> implements IMap<K, V> {
 
     private CuckooHashBucketEntryNode.HashingMap<K, V> head
     private CuckooHashBucketEntryNode.HashingMap<K, V> tail

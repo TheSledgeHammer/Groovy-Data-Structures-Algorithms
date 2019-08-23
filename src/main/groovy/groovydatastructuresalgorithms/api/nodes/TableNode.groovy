@@ -16,9 +16,10 @@
 
 package groovydatastructuresalgorithms.api.nodes
 
+import groovydatastructuresalgorithms.api.interfaces.ITable
 import groovydatastructuresalgorithms.api.interfaces.ITableNode
 
-class TableNode<R, C, V> implements ITableNode<R, C, V> {
+class TableNode<R, C, V> implements ITableNode<R, C, V>, ITable<R,C,V> {
 
     private R row
     private C column

@@ -16,9 +16,10 @@
 
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.api.interfaces.IMap
 import groovydatastructuresalgorithms.api.nodes.MapNode
 
-class CircularDoublyLinkedMap<K, V> {
+class CircularDoublyLinkedMap<K, V> implements IMap<K, V> {
 
     private MapNode<K, V> head
     private MapNode<K, V> tail

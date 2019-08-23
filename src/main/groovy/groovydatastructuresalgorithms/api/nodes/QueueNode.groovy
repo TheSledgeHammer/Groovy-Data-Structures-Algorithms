@@ -16,27 +16,26 @@
 
 package groovydatastructuresalgorithms.api.nodes
 
-import groovydatastructuresalgorithms.api.interfaces.IList
 import groovydatastructuresalgorithms.api.interfaces.INodeValue
 
-class ListNode<V> implements IList<V>, INodeValue<V> {
+class QueueNode<V> implements INodeValue<V> {
 
-    private V value
-    private ListNode<V> next
-    private ListNode<V> prev
+    private V value;
+    private QueueNode<V> first;
+    private QueueNode<V> last;
 
-    ListNode(V value) {
-        setValue(value)
-        setNext(null)
-        setPrev(null)
+    QueueNode(V value) {
+        setValue(value);
+        setFirst(null);
+        setLast(null);
     }
 
-    void setNext(ListNode<V> next) {
-        this.next = next
+    void setFirst(QueueNode<V> first) {
+        this.first = first
     }
 
-    void setPrev(ListNode<V> prev) {
-        this.prev = prev
+    void setLast(QueueNode<V> last) {
+        this.last = last
     }
 
     @Override
@@ -44,16 +43,16 @@ class ListNode<V> implements IList<V>, INodeValue<V> {
         this.value = value
     }
 
-    ListNode<V> Next() {
-        return next
+    QueueNode<V> First() {
+        return first
     }
 
-    ListNode<V> Prev() {
-        return prev
+    QueueNode<V> Last() {
+        return last;
     }
 
     @Override
     V getValue() {
-        return value
+        return value;
     }
 }

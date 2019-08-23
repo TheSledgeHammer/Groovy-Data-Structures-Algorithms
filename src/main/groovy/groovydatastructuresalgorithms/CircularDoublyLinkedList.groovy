@@ -16,9 +16,10 @@
 
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.api.interfaces.IList
 import groovydatastructuresalgorithms.api.nodes.ListNode
 
-class CircularDoublyLinkedList<V> {
+class CircularDoublyLinkedList<V> implements IList<V> {
 
     private ListNode<V> head
     private ListNode<V> tail

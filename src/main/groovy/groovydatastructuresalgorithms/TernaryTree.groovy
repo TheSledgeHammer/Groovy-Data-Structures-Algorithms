@@ -16,9 +16,10 @@
 
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.api.interfaces.ITree
 import groovydatastructuresalgorithms.api.nodes.TreeNode
 
-class TernaryTree<V> {
+class TernaryTree<V> implements ITree<V> {
 
     private CircularDoublyLinkedList<TreeNode<V>> root;
     private int size = 0;

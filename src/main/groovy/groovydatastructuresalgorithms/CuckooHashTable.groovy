@@ -1,8 +1,9 @@
 package groovydatastructuresalgorithms
 
+import groovydatastructuresalgorithms.api.interfaces.ITable
 import groovydatastructuresalgorithms.api.nodes.hashing.CuckooHashBucketEntryNode
 
-class CuckooHashTable<R, C, V> {
+class CuckooHashTable<R, C, V> implements ITable<R, C, V> {
 
     private CuckooHashBucketEntryNode.HashingTable<R, C, V> head
     private CuckooHashBucketEntryNode.HashingTable<R, C, V> tail

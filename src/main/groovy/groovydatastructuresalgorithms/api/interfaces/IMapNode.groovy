@@ -16,6 +16,6 @@
 
 package groovydatastructuresalgorithms.api.interfaces
 
-interface IMapNode<K, V> extends INodeKey<K>, INodeValue<V> {
+interface IMapNode<K, V> extends IMap<K,V>, INodeKey<K>, INodeValue<V> {
 
 }

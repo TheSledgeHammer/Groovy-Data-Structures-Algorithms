@@ -18,7 +18,6 @@ package groovydatastructuresalgorithms.api.nodes.hashing
 
 import com.google.common.hash.HashCode
 import com.google.common.hash.HashFunction
-import com.google.common.hash.Hashing
 import fnv.FNV
 import groovydatastructuresalgorithms.CircularDoublyLinkedMap
 import groovydatastructuresalgorithms.api.interfaces.IHashBucketNode
