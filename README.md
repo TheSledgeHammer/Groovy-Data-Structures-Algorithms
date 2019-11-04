@@ -25,6 +25,9 @@ The following Contains various helpful data structure classes. It is a re-write 
 
 * CompleteBinaryTree: A binary tree in which every level, except possibly the last, is completely filled, and all nodes are as far left as possible.
 
+#### Queues/ Deques:
+* CircularDoublyLinkedDeque: A Deque that is backed by a CircularDoublyLinkedList.
+
 #### Hashing:
 * CuckooHashMap: A HashMap using the Cuckoo Hash Collision Algorithm. Uses the following 4 hash algorithms: SHA1, FNV1a_128, Murmur3_128 & MD5 (in no set order)
 

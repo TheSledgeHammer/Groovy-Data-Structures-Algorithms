@@ -47,26 +47,26 @@ class CompleteBinaryTree<V> implements ITree<V> {
         return size;
     }
 
-   void add(V value) {
-       BinaryTree<V> node = new BinaryTree<>(value);
-       if (size == 0 || root == null) {
-           node.addLeft(value);
-           root = node;
-       }
-       if (size > 0 || root != null) {
-           if (leftCounter > rightCounter) {
-               node.addRight(value);
-               rightCounter++;
-               right.add(node);
-           } else {
-               node.addLeft(value);
-               leftCounter++;
-               left.add(node);
-           }
-       }
-       root = node;
-       size++;
-   }
+    void add(V value) {
+        BinaryTree<V> node = new BinaryTree<>(value);
+        if (size == 0 || root == null) {
+            node.addLeft(value);
+            root = node;
+        }
+        if (size > 0 || root != null) {
+            if (leftCounter > rightCounter) {
+                node.addRight(value);
+                rightCounter++;
+                right.add(node);
+            } else {
+                node.addLeft(value);
+                leftCounter++;
+                left.add(node);
+            }
+        }
+        root = node;
+        size++;
+    }
 
     V get(V value) {
         for(int i = 0; i < size; i++) {
@@ -78,7 +78,7 @@ class CompleteBinaryTree<V> implements ITree<V> {
     }
 
     V getByIndex(int index) {
-        return root.getByIndex(index)
+        return root.get(index)
     }
 
     void delete(V value) {

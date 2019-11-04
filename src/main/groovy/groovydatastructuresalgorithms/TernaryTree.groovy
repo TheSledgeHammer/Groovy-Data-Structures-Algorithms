@@ -105,6 +105,11 @@ class TernaryTree<V> implements ITree<V> {
         return null;
     }
 
+    V get(int index) {
+        TreeNode<V> node = root.getNode(index).getValue();
+        return node.getValue();
+    }
+
     void delete(V value) {
         TreeNode<V> node = null;// new TreeNode<>(value);
         for(int i = 0; i < size; i++) {

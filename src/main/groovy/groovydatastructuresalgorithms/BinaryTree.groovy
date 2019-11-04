@@ -89,7 +89,7 @@ class BinaryTree<V> implements ITree<V>  {
         return null;
     }
 
-    V getByIndex(int index) {
+    V get(int index) {
         TreeNode<V> node = root.getNode(index).getValue();
         return node.getValue();
     }
